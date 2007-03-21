@@ -1,0 +1,81 @@
+Qonk
+----
+
+Qonk is a small build-and-conquer strategy game with very simple rules. A
+complete game only lasts for a few minutes and can be a fun break away from
+work or whatever you're doing.
+
+The setting of the game is a solar system of planets. Your goal is to conquer
+all of the planets in the game by sending ships there. Planets that are 
+under your control generate new ships. Simple AI players are playing against
+you. As you gain more experience throughout the game, more AI players have to
+be kicked out of bigger solar systems.
+
+(from http://anthony.liekens.net/index.php/Computers/Qonk)
+
+The game is currently very much in beta and was written and published by
+Anthony Liekens.
+
+Dependencies
+------------
+To compile the program you will need to install SDL, SDL_ttf and SDL_gfx.
+Just do a simple "make", and the program should be compiling.
+
+Qonk-rs
+-------
+Qonk-rs is a simple functional change of the original name to denote that
+I (Robert Schuster) modified it. Additionally I did not add a version number
+but used the release date instead.
+
+Modifications
+-------------
+(2007-02-17 Robert Schuster <robertschuster@fsfe.org>)
+
+Starting from the 0.0.2beta1 code[0] a simpler way of selecting the 
+ships has been implemented. Originally you had to draw a box around the
+ships to form your fleet. Now you draw a box around your planets(use 
+the left mouse button) or select a single planet (currently with the middle
+mouse button) and confirm the move with a right-click on the target.
+
+In this moment a pre-defined percentag of the ships at each planet will 
+head towards the target. You can change the percentage any time by 
+pressing the number keys (1 -> 10%, ..., 9 -> 90%, 0 -> 100%).
+
+If you know galcon you know how it works.
+
+Ah yes. The second small modification changes the way ship build time
+is calculated. It is simple: The bigger the planet the shorter the build
+time. Unfortunately I haven't touched the AI to hunt for the rich planets
+first. Any volunteers?
+
+Issues
+------
+- You cannot select ships which are already in the vasts of space.
+
+Q & A
+-----
+
+Q: You have stolen an idea from galcon.
+A: Thanks goodness software ideas are not patentable (at least in europe). It
+   doesn't do galcon any harm if I implement a feature that they have and I like.
+   So the idea is not *stolen* it has spread.
+
+Q: What is your relation with galcon.
+A: Nothing. I played it a while found it nice but found it inacceptable (for me)
+   that it is not free software.
+
+Q: What is your relation with the original QONK.
+A: People on happypenguin.org wrote about it in the comments for galcon. So I
+   downloaded, compiled and played it. I found it funny and wanted to add a few
+   features. At first I wanted to see whether they make sense for QONK (I think
+   they do) and then I wanted to push this back into the free and open-source
+   software realm in the hope that someone else will add even more good stuff.
+
+Q: Are you planning to do more work on QONK?
+A: No. I don't have the time. However I would like to see that others pick it
+   up where I left or modify the original source to their needs. QONK is
+   well-written, add a bit more abstraction to e.g. the input handling and
+   one can push it much farther and make it the second best free software
+   time killer (after Frozen Bubble ;)).
+
+[0] - http://anthony.liekens.net/pub/files/qonk-0.0.2beta1.tar.gz

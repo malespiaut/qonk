@@ -1,0 +1,14 @@
+AI to hunt for the large planets first
+
+Difficulty level: 
+EASY: HumanPlayer build ships faster
+NORMAL: As is
+HARD: Can't see enemys ships
+
+Animated sun
+	Fluctuationg length
+	drawSun(); function
+
+Add network multiplayer
+
+Add menu system
