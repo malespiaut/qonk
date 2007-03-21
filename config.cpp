@@ -1,7 +1,6 @@
 // Copyirght 2005 by Anthony Liekens anthony@liekens.net
 
 #include "config.h"
-#include "ReadConf.h"
 #include <iostream>
 using namespace std;
 class Config;
@@ -24,9 +23,9 @@ Settings::Settings() {
 		v.push_back("numberOfComputerPlayers = 1");
 		createFile("qonk.conf",v);  
 	}
+	Config config("qonk.conf");
 	
 	//Read settings form qonk.conf
-  	Config config("qonk.conf");
 	bool fs = config.getValueBOOL("fullscreen");
 	int h = config.getValueINT("height");
 	int w = config.getValueINT("width");

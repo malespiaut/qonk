@@ -8,6 +8,7 @@
 #include "universe.h"
 #include "fonts.h"
 #include "ReadConf.h"
+#include "config.h"
 
 #include <SDL/SDL_gfxPrimitives.h>
 #include <SDL/SDL.h>
@@ -66,9 +67,9 @@ void changeScreen(SDL_Surface **screen) {
 
 
 int main(int argc, char** argv) {
-	//Create configuration file if it does not exist
-		
-	Config config("qonk.conf");
+	
+	
+	//Config config("qonk.conf"); // is read in as static in config.h
 	bool fullscreen = config.getValueBOOL("fullscreen");
 	int h = config.getValueINT("height");
 	int w = config.getValueINT("width");

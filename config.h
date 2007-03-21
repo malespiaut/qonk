@@ -6,6 +6,7 @@
 #define PI 3.14159265
 
 #include "timer.h"
+#include "ReadConf.h"
 #include <vector>
 #include <string>
 
@@ -29,5 +30,7 @@ public:
 };
 
 static Settings settings;
+static Config config("qonk.conf");
+
 
 #endif
