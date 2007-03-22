@@ -175,7 +175,7 @@ int main(int argc, char** argv) {
 	
 	int iteration = 0;
 
-	bool showEnemyShips = true;
+	bool showEnemyShips = false;
 	
 	bool quit = false;
 
