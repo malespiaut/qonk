@@ -53,7 +53,7 @@ public:
   Player* getOwner() const;
   Planet* getPlanet() const;
 
-  int getDirection() const;
+  double getDirection() const;
 };
 
 class Ships : public list< Ship* > {

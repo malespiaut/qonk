@@ -93,108 +93,15 @@ Ship::render( SDL_Surface* screen, Uint32 color ) const {
 	if( shipState == RESIDENT ) {
 		Coordinate planetLocation = planet->getLocation();
 		aalineRGBA( screen, locx, locy, planetLocation.getXMapped(), planetLocation.getYMapped(), red, green, blue, 64 );
-	}
-//	filledCircleRGBA( screen, locx, locy, 1, getRed( color ), getGreen( color ), getBlue( color ), 255 );
-	int direction = getDirection();
-	switch (direction) {
-		case 0 :
-			//Cross
-			pixelRGBA( screen, locx, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx + 1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx - 1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy + 1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy - 1, red, green, blue, 255 );
-			break;
-		case 1 :
-			pixelRGBA( screen, locx+2, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy, red, green, blue, 255 );
-			break;
-		case 2 :
-			pixelRGBA( screen, locx+2, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy-2, red, green, blue, 255 );
-			break;
-		case 3 :
-			pixelRGBA( screen, locx+2, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy, red, green, blue, 255 );
-			break;
-		case 4 :
-			// Ship pointing down
-			pixelRGBA( screen, locx, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy-2, red, green, blue, 255 );
-			break;
-		case 5 :
-			pixelRGBA( screen, locx-2, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy, red, green, blue, 255 );
-			break;
-		case 6 :
-			pixelRGBA( screen, locx-2, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy-2, red, green, blue, 255 );
-			break;
-		case 7 :
-			pixelRGBA( screen, locx-2, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy, red, green, blue, 255 );
-			break;
-		case 8 :	
-			// Ship pointing up
-			pixelRGBA( screen, locx, locy-2, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy-1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx-1, locy, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy+1, red, green, blue, 255 );
-			pixelRGBA( screen, locx+2, locy+2, red, green, blue, 255 );
-			pixelRGBA( screen, locx-2, locy+2, red, green, blue, 255 );
-		break;
+		filledCircleRGBA( screen, locx, locy, 1, getRed( color ), getGreen( color ), getBlue( color ), 255 );
+	} else {
+		double direction = getDirection();
+		Coordinate head = Coordinate( locx + 5.0 * cos( direction ), locy + 5.0 * sin( direction ) );
+		Coordinate leftTip = Coordinate( locx + 2.0 * cos( direction + PI / 3.0 ), locy + 2.0 * sin( direction + PI / 3.0 ) );
+		Coordinate rightTip = Coordinate( locx + 2.0 * cos( direction - PI / 3.0 ), locy + 2.0 * sin( direction - PI / 3.0 ) );
+		aalineRGBA( screen, leftTip.getX(), leftTip.getY(), head.getX(), head.getY(), red, green, blue, 255 );
+		aalineRGBA( screen, rightTip.getX(), rightTip.getY(), head.getX(), head.getY(), red, green, blue, 255 );
+		aalineRGBA( screen, rightTip.getX(), rightTip.getY(), leftTip.getX(), leftTip.getY(), red, green, blue, 255 );
 	}
 }
 
@@ -264,42 +171,19 @@ Ship::getPlanet() const {
 	return planet;
 }
 
-int Ship::getDirection() const {
+double
+Ship::getDirection() const {
 	if(shipState == RESIDENT){
 		return 0;
-	} else if(shipState == MOVING) {
+	} else if( shipState == MOVING ) {
 		double dx = toLocation.getX() - location.getX();
-		double dy = -(toLocation.getY() - location.getY());
-		double dydx = dy/dx;
-		if (dx > 0.0){
-			if (dydx > 2.4142) {
-				return 8;
-			} else if (dydx < 2.4142 && dydx > 0.4142){
-				return 1;
-			} else if (dydx > -2.4142 && dydx < -0.4142){
-				return 3;
-			} else if(dydx < -2.4142){
-				return 4;
-			} else {
-				return 2;
-			}
-		} else {
-			if (dydx > 2.4142) {
-				return 4;
-			} else if (dydx < 2.4142 && dydx > 0.4142){
-				return 5;
-			} else if (dydx > -2.4142 && dydx < -0.4142){
-				return 7;
-			} else if(dydx < -2.4142){
-				return 8;
-			} else {
-				return 6;
-			}
-		}
+		double dy = toLocation.getY() - location.getY();
+		double l = sqrt( dx*dx + dy*dy ); // length of vector
+		double angle = acos( dx / l );
+		if( dy < 0 ) angle = -angle;
+		return angle;
 	}
-	
 }
-
 
 /* ##### SHIPS ##### */
 
