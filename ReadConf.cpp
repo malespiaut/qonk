@@ -20,7 +20,7 @@ Config::Config( const std::string& configFileName ){
 std::string 
 Config::getValue( const std::string& parameter ) const {
 	std::map< std::string, std::string >::const_iterator i = data.find( parameter );
-	if( i != NULL )
+	if( i != data.end() )
 		return i->second;
 	else
 		return "";
