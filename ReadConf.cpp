@@ -9,89 +9,73 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-Config::Config(char* configfile){
- 	ifstream file;
- 	file.open(configfile);
- 	while (!file.eof()){
- 		string s;
- 		getline(file,s);
- 		if (s[0]!='#')
- 			data.push_back(s);
- 	}
- 	file.close();
-}
-
-string Config::getValue(string entry){
-	for (vector<string>::const_iterator i = data.begin(); i!=data.end();i++){
-		string::const_iterator b=(*i).begin(), e=(*i).end(), iter=b;
-		int entryBegin, entryEnd, valueBegin, valueEnd, j=0;
-		while (isspace(*iter)){
-			iter++;
-			j++;
-		}
-		entryBegin = j;
-		while (!isspace(*iter) && *iter != '='){
-			iter++;
-			j++;	
-		}
-		entryEnd = j;
-		if ((*i).substr(entryBegin,entryEnd-entryBegin)==entry){
-			while (isspace(*iter) || *iter == '='){
-				iter++;
-				j++;	
-			}
-			valueBegin = j;
-			while (!isspace(*iter) && iter!=e){
-				iter++;
-				j++;	
-			}
-			valueEnd = j;
-			return (*i).substr(valueBegin,valueEnd-valueBegin);	
+Config::Config( const std::string& configFileName ){
+	ifstream file( configFileName.c_str() );
+	while (!file.eof()){
+		string line;
+		getline( file, line );
+		string::size_type loc = line.find( "=", 0 );
+		if( line[0] != '#' )
+		if( loc != string::npos ) {
+			string parameter = stripWhiteSpace( line.substr( 0, loc ) );
+			string value = stripWhiteSpace( line.substr( loc + 1 ) );
+			data[ parameter ] = value;
 		}
 	}
+	file.close();
+	std::cout << "config file read" << std::endl;
 }
 
-string Config::getValue(char* entry){
-	string entryS(entry); //convert to string
-	return getValue(entryS);
+string 
+Config::getValue( const std::string& parameter ) const {
+	std::map< std::string, std::string >::const_iterator i = data.find( parameter );
+	if( i != NULL )
+		return i->second;
+	else
+		return "";
 }
 
-bool Config::getValueBOOL(char* entry){
-	string s = getValue(entry);
+bool 
+Config::getValueBOOL( const std::string& parameter ) const {
+	string s = getValue(parameter);
 	return str2bool(s);
 }
-int Config::getValueINT(char* entry){
-	string s = getValue(entry);
+
+int 
+Config::getValueINT( const std::string& parameter ) const {
+	string s = getValue(parameter);
 	return str2int(s);
 }
 
-void Config::printVec(){
-	for (vector<string>::const_iterator i = data.begin(); i!=data.end();i++)
-		cout << *i << endl;
+void 
+Config::print() const {
+	for( std::map< std::string, std::string >::const_iterator i = data.begin(); i != data.end(); i++ )
+		std::cout << "'" << i->first << "' => '" << i->second << "'" << std::endl;
 }
 
-bool fileExists(char* file) {
-	ifstream infile;
-	infile.open (file);
-	bool fE=infile.good();
+bool 
+fileExists( const std::string& fileName ) {
+	ifstream infile( fileName.c_str() );
+	bool result = infile.good();
 	infile.close();
-	return fE;
+	return result;
 }
 
-void createFile(char* file,std::vector<string> content){
-	 	if (!fileExists(file)){
-	 		ofstream outfile;
-			outfile.open (file);
-			for (vector<string>::const_iterator iter = content.begin();iter!=content.end();iter++){
-				outfile.write ((*iter).data(),(*iter).size());
-				outfile.write ("\n",1);
-			}
-			outfile.close();
+void 
+createFile( const std::string& fileName, std::vector<string> content ){
+	if( !fileExists( fileName ) ){
+		ofstream outfile( fileName.c_str() );
+		for( std::vector< std::string >::const_iterator iter = content.begin(); iter != content.end(); iter++ ) {
+			outfile.write( (*iter).data(), (*iter).size() );
+			outfile.write( "\n", 1 );
 		}
+		outfile.close();
+	}
 }
 
-bool str2bool(const string& s){
-	if (s == string("true")){
+bool 
+str2bool( const string& s ) {
+	if (s == string("true")) {
 		return true;
 	} else if (s == string("false")){
 		return false;
@@ -100,11 +84,17 @@ bool str2bool(const string& s){
 	}
 }
 
-int str2int(const string& s)
- {
-   std::istringstream i(s);
-   int x;
-   i>>x;
-   return x;
- }
+int 
+str2int(const string& s) {
+	std::istringstream i(s);
+	int x;
+	i>>x;
+	return x;
+}
 
+std::string 
+stripWhiteSpace( const std::string& original ) {
+	int begin = original.find_first_not_of( " " );
+	int end = original.find_last_not_of( " " );
+	return original.substr( begin, end - begin + 1 );
+}

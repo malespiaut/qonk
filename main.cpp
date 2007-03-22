@@ -10,7 +10,7 @@
 #include "ReadConf.h"
 #include "config.h"
 
-#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL_gfxPrimitives.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <math.h>
@@ -68,15 +68,13 @@ void changeScreen(SDL_Surface **screen) {
 
 int main(int argc, char** argv) {
 	
-	
-	//Config config("qonk.conf"); // is read in as static in config.h
-	bool fullscreen = config.getValueBOOL("fullscreen");
+/*	bool fullscreen = config.getValueBOOL("fullscreen");
 	int h = config.getValueINT("height");
 	int w = config.getValueINT("width");
 	
 	settings.setResolution( w, h );
 	settings.setFullscreen( fullscreen );
-	
+*/	
 	bool FirstRun = true;
 
 	int numberOfPlanets;
@@ -91,8 +89,10 @@ int main(int argc, char** argv) {
 	if( argc != 3 ) {
 		//cerr << "Usage: " << argv[ 0 ] << " numberOfPlanets numberOfComputerPlayers" << endl;
 		//cerr << "Setting to default 6 planets and 1 computer player" << endl;
-		numberOfPlanets = config.getValueINT("numberOfPlanets");
-		numberOfComputerPlayers = config.getValueINT("numberOfComputerPlayers");
+//		numberOfPlanets = config.getValueINT("numberOfPlanets");
+//		numberOfComputerPlayers = config.getValueINT("numberOfComputerPlayers");
+		numberOfPlanets = 6;
+		numberOfComputerPlayers = 1;
 	} else {
 		numberOfPlanets = atoi( argv[ 1 ] );
 		numberOfComputerPlayers = atoi( argv[ 2 ] );

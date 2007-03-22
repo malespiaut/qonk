@@ -1,7 +1,7 @@
 // Copyright 2005 by Anthony Liekens anthony@liekens.net
 
 #include "extensions.h"
-#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL_gfxPrimitives.h>
 
 void 
 alphaBlend( SDL_Surface* surface, Uint8 alpha ) {

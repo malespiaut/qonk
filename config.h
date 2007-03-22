@@ -30,7 +30,6 @@ public:
 };
 
 static Settings settings;
-static Config config("qonk.conf");
-
+//static Config config("qonk.conf");
 
 #endif

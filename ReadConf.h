@@ -6,6 +6,7 @@
 #define READCONF_H
 
 #include <string>
+#include <map>
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -14,23 +15,22 @@
 
 class Config {
 public:
-	Config(char*);
+	Config( const std::string& fileName );
 	
-	std::string getValue(char*);
-	std::string getValue(std::string);
-	bool getValueBOOL(char*);
-	int getValueINT(char*);	
+	std::string getValue( const std::string& parameter ) const;
+	bool getValueBOOL( const std::string& parameter ) const;
+	int getValueINT( const std::string& parameter ) const;	
 	
-	void printVec();
+	void print() const;
 		
 private:
-	std::vector<std::string> data;
-	
+	std::map< std::string, std::string > data;
 };
 
-bool fileExists(char*);
-void createFile(char*,std::vector<std::string>);
-bool str2bool(const std::string&);
-int str2int(const std::string&);
+bool fileExists( const std::string& );
+void createFile( const std::string&, std::vector< std::string > );
+bool str2bool(const std::string& );
+int str2int(const std::string& );
+std::string stripWhiteSpace( const std::string& );
 
 #endif

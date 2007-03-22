@@ -1,7 +1,7 @@
 // Copyright 2005 by Anthony Liekens anthony@liekens.net
 
 #include "animations.h"
-#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL_gfxPrimitives.h>
 
 #include <iostream>
 using namespace std;

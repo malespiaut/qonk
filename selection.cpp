@@ -1,7 +1,7 @@
 // Copyright 2005 by Anthony Liekens anthony@liekens.net
 
 #include "selection.h"
-#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL_gfxPrimitives.h>
 #include <iostream>
 
 Selection::Selection() {

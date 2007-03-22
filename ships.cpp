@@ -2,7 +2,7 @@
 
 #include "ships.h"
 #include "extensions.h"
-#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL_gfxPrimitives.h>
 #include <iostream>
 using namespace std;
 

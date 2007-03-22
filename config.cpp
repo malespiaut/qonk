@@ -1,4 +1,4 @@
-// Copyirght 2005 by Anthony Liekens anthony@liekens.net
+// Copyright 2005 by Anthony Liekens anthony@liekens.net
 
 #include "config.h"
 #include <iostream>
@@ -24,12 +24,10 @@ Settings::Settings() {
 		createFile("qonk.conf",v);  
 	}
 	Config config("qonk.conf");
-	
 	//Read settings form qonk.conf
 	bool fs = config.getValueBOOL("fullscreen");
 	int h = config.getValueINT("height");
 	int w = config.getValueINT("width");
-	
 	setResolution(w, h );
 	setFullscreen( fs );
 }

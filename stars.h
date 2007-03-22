@@ -3,7 +3,7 @@
 #ifndef STARS_H
 #define STARS_H
 
-#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL_gfxPrimitives.h>
 #include "coordinate.h"
 #include <SDL/SDL.h>
 #include <vector>

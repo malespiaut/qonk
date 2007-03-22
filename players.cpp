@@ -2,7 +2,7 @@
 
 #include "players.h"
 
-#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL_gfxPrimitives.h>
 
 #include <iostream>
 #include <map>
