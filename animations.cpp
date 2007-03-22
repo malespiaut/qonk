@@ -4,7 +4,6 @@
 #include <SDL_gfxPrimitives.h>
 
 #include <iostream>
-using namespace std;
 
 void
 AnimationQueue::render( SDL_Surface* screen ) {

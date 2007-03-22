@@ -21,7 +21,6 @@
 #include <vector>
 #include <string>
 #include <list>
-using namespace std;
 
 Font* font;
 Uint32 FPStimer, FPScounter;

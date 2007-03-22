@@ -4,7 +4,6 @@
 #include "extensions.h"
 #include <SDL_gfxPrimitives.h>
 #include <iostream>
-using namespace std;
 
 /* ##### SHIP ##### */
 

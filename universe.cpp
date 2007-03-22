@@ -4,8 +4,6 @@
 #include <SDL_gfxPrimitives.h>
 #include <iostream>
 
-using namespace std;
-
 Universe::Universe() {
   stars = new Stars( 100 );
   planets = new Planets( 15, 15 );

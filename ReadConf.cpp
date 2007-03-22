@@ -1,24 +1,15 @@
 #include "ReadConf.h"
 
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
-using std::isspace;
-using std::cout;
-using std::cerr;
-using std::endl;
-
 Config::Config( const std::string& configFileName ){
-	ifstream file( configFileName.c_str() );
+	std::ifstream file( configFileName.c_str() );
 	while (!file.eof()){
-		string line;
+		std::string line;
 		getline( file, line );
-		string::size_type loc = line.find( "=", 0 );
+		std::string::size_type loc = line.find( "=", 0 );
 		if( line[0] != '#' )
-		if( loc != string::npos ) {
-			string parameter = stripWhiteSpace( line.substr( 0, loc ) );
-			string value = stripWhiteSpace( line.substr( loc + 1 ) );
+		if( loc != std::string::npos ) {
+			std::string parameter = stripWhiteSpace( line.substr( 0, loc ) );
+			std::string value = stripWhiteSpace( line.substr( loc + 1 ) );
 			data[ parameter ] = value;
 		}
 	}
@@ -26,7 +17,7 @@ Config::Config( const std::string& configFileName ){
 	std::cout << "config file read" << std::endl;
 }
 
-string 
+std::string 
 Config::getValue( const std::string& parameter ) const {
 	std::map< std::string, std::string >::const_iterator i = data.find( parameter );
 	if( i != NULL )
@@ -37,13 +28,13 @@ Config::getValue( const std::string& parameter ) const {
 
 bool 
 Config::getValueBOOL( const std::string& parameter ) const {
-	string s = getValue(parameter);
+	std::string s = getValue(parameter);
 	return str2bool(s);
 }
 
 int 
 Config::getValueINT( const std::string& parameter ) const {
-	string s = getValue(parameter);
+	std::string s = getValue(parameter);
 	return str2int(s);
 }
 
@@ -55,16 +46,16 @@ Config::print() const {
 
 bool 
 fileExists( const std::string& fileName ) {
-	ifstream infile( fileName.c_str() );
+	std::ifstream infile( fileName.c_str() );
 	bool result = infile.good();
 	infile.close();
 	return result;
 }
 
 void 
-createFile( const std::string& fileName, std::vector<string> content ){
+createFile( const std::string& fileName, std::vector< std::string > content ){
 	if( !fileExists( fileName ) ){
-		ofstream outfile( fileName.c_str() );
+		std::ofstream outfile( fileName.c_str() );
 		for( std::vector< std::string >::const_iterator iter = content.begin(); iter != content.end(); iter++ ) {
 			outfile.write( (*iter).data(), (*iter).size() );
 			outfile.write( "\n", 1 );
@@ -74,18 +65,18 @@ createFile( const std::string& fileName, std::vector<string> content ){
 }
 
 bool 
-str2bool( const string& s ) {
-	if (s == string("true")) {
+str2bool( const std::string& s ) {
+	if (s == std::string("true")) {
 		return true;
-	} else if (s == string("false")){
+	} else if (s == std::string("false")){
 		return false;
 	} else {
-		cerr << "Invalid bool type";
+		std::cerr << "Invalid bool type";
 	}
 }
 
 int 
-str2int(const string& s) {
+str2int( const std::string& s ) {
 	std::istringstream i(s);
 	int x;
 	i>>x;
