@@ -1,5 +1,5 @@
-PREFIX=/usr/local/share/games
-BIN=/usr/local/bin
+PREFIX=/home/rob/INSTALL/qonk
+BIN=/home/rob/INSTALL/qonk/bin
 
 CXX=g++
 CFLAGS=`sdl-config --cflags` -O3
@@ -45,6 +45,7 @@ dist: clean
 
 install: all
 	mkdir -p $(PREFIX)/qonk
+	mkdir -p $(BIN)
 	cp qonk $(PREFIX)/qonk/
 	cp font.ttf $(PREFIX)/qonk/	
 	cp qonk.conf $(PREFIX)/qonk/	
