@@ -17,10 +17,10 @@ private:
   Uint32 displayTime;
   std::string message;
 public:
-  Message( std::string message, Uint32 displayTime, Uint8 r, Uint8 g, Uint8 b );
-  Message( std::string message, Uint32 displayTime, Uint32 color );
-  Message( std::string message, Uint8 r, Uint8 g, Uint8 b );
-  Message( std::string message, Uint32 color );
+  Message( Uint32, std::string message, Uint32 displayTime, Uint8 r, Uint8 g, Uint8 b );
+  Message( Uint32, std::string message, Uint32 displayTime, Uint32 color );
+  Message( Uint32, std::string message, Uint8 r, Uint8 g, Uint8 b );
+  Message( Uint32, std::string message, Uint32 color );
   void render(int &x, int &y, int time );
   Uint32 getDisplayTime();
 };
@@ -34,8 +34,8 @@ public:
   Messages();
   ~Messages();
   void addMessage( Uint32 time, Message m );
-  void cleanup();
-  void render();
+  void cleanup(Uint32);
+  void render(Uint32);
   
   //Begin Jacobsen
   void setFleetStrengthMessage( Message m );

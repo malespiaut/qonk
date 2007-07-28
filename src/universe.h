@@ -6,6 +6,7 @@
 class Stars;
 class Planet;
 class Planets;
+class Player;
 class ActionQueue;
 class AnimationQueue;
 
@@ -24,10 +25,13 @@ public:
 
   void highlightNearestPlanet(int x, int y);
   
-  void update();
+  void update(Uint32);
   
-  void renderBackground();
-  void renderForeground();
+  void renderBackground(Uint32);
+  void renderForeground(Uint32);
+  
+  void claim(Uint32, Player *, int, int);
+  void claimRemaining(Uint32, Player *, int, int);
 };
 
 #endif

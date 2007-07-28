@@ -85,9 +85,16 @@ void
 Menu::resize(int w, int h)
 {
   container->setSize(w, h);
+  
+  int maxWidth = 0;
+  for (vector< MenuEntry * >::iterator i = entries->begin(); i != entries->end(); i++)
+  {
+    gcn::Widget *w = (*i)->getWidget();
+    maxWidth = max(w->getWidth(), maxWidth);
+  }
 
-  int x = (!locx) ? w/3 : locx;
-  int y = 100;
+  int x = (!locx) ? (w/2 - maxWidth/2) : locx;
+  int y = h/8;
 
   title->setPosition(x, y);
   y += 2 * title->getHeight();
@@ -136,6 +143,12 @@ Menu::cancel()
 
     menuSystem->enter(parentMenuId);
   }
+}
+
+void
+Menu::reset()
+{
+  entries->at(selected)->reset();
 }
 
 void
@@ -192,6 +205,11 @@ class ActionEntry : public MenuEntry
     bool cancel()
     {
       return action->cancel();
+    }
+    
+    void reset()
+    {
+      action->reset();
     }
 
 };

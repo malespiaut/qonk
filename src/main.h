@@ -33,6 +33,8 @@ class Main : public InputHandler
     void startSensing();
 
     void finishSensing(GameAction, bool);
+    
+    void resetGameAction(GameAction);
 
     void quit();
 

@@ -7,10 +7,10 @@
 #include "canvas.h"
 
 void
-AnimationQueue::render( ) {
+AnimationQueue::render(Uint32 time) {
   for( iterator i = begin(); i != end(); i++ ) {
     Animation* animation = (Animation*)( i->second );
-    animation->render( );
+    animation->render(time);
   }
 }
 
@@ -30,10 +30,9 @@ SonarAnimation::SonarAnimation( Planet* planet, const Uint32& color, const int& 
 }
 
 void
-SonarAnimation::render( ) {
-  Uint32 currentTime = timer.getTime();
-  if( ( currentTime > startTime ) && ( currentTime < endTime ) ) {
-    double percentage = (double)( currentTime - startTime ) / ( endTime - startTime );
+SonarAnimation::render(Uint32 time) {
+  if( ( time > startTime ) && ( time < endTime ) ) {
+    double percentage = (double)( time - startTime ) / ( endTime - startTime );
     Canvas::drawSonar(planet->getLocation(), size, percentage, r, g, b, circle);
   }
 }

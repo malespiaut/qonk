@@ -19,9 +19,10 @@ public:
   enum ShipStates { RESIDENT, MOVING, DEAD };
   
 private:
-  Player* owner;
-  Planet* planet;
+  Player *owner;
+  Planet *planet;
   Coordinate location;
+  Coordinate orbitLocation;
   bool selected;
   double speed;
   
@@ -33,11 +34,11 @@ private:
   Uint32 fromTime, toTime;
 	
 public:
-  Ship( Player*, Planet* );
+  Ship( Player*, Planet*, Uint32 );
   
   void die();
   
-  void moveTo( Uint32, Planet*, ActionQueue* );
+  void moveTo( Uint32, Planet * const, ActionQueue* );
   
   void render( Uint32 color ) const;
   void renderSelection( ) const;
@@ -51,10 +52,12 @@ public:
   void setSelected( bool selected );
   bool getSelected() const;
   double getSpeed() const;
-  Player* getOwner() const;
-  Planet* getPlanet() const;
+  Player *getOwner() const;
+  Planet *getPlanet() const;
 
   double getDirection() const;
+  
+  void update(Uint32);
 };
 
 class Ships : public std::list< Ship* > {
@@ -62,9 +65,10 @@ public:
 
   void removeDeadShips();
 
+  void update(Uint32);
   void render( Uint32 color ) const;
   
-  void moveTo( Planet* destination, ActionQueue* actionQueue );
+  void moveTo(Uint32, Planet* destination, ActionQueue* actionQueue );
   int numberSelectedShips();
 
   void select( Selection* selection );

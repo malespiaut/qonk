@@ -10,12 +10,12 @@ class Planet;
 class Animation : public Action {
 public:
   void execute( const Uint32& time ) {}
-  virtual void render( ) = 0;
+  virtual void render(Uint32) = 0;
 };
 
 class AnimationQueue : public ActionQueue {
 public:
-  void render( );
+  void render(Uint32);
 };
 
 class SonarAnimation : public Animation {
@@ -28,7 +28,7 @@ private:
 public:
   SonarAnimation();
   SonarAnimation( Planet* planet, const Uint32& color, const int& size, const Uint32& startTime, const Uint32& endTime, bool circle = false );
-  void render( );
+  void render(Uint32);
 };
 
 #endif

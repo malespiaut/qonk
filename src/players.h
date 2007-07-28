@@ -30,12 +30,10 @@ protected:
   int team;
   
 public:
-  Player();
-  Player( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int t );
+  Player(Universe *, Uint32, int);
   virtual ~Player() {}
   
-  void addShips( Planet* planet, int numberOfShips );
-  void createShip( Uint32& time, Planet* planet );
+  void addShip(Uint32, Planet * const);
   void removeDeadShips();
   
   void render();
@@ -64,7 +62,7 @@ class HumanPlayer : public Player {
 private:
   int fleetStrength;
 public:
-  HumanPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int team );
+  HumanPlayer( Universe* universe, Uint32 color, int team );
   
   void update(Game *game);
   
@@ -78,7 +76,7 @@ public:
 
   void selectNearestPlanet(int, int);
 
-  void moveToNearestPlanet(int, int);
+  void moveToNearestPlanet(Uint32, int, int);
 };
 
 class ComputerPlayer : public Player {
@@ -91,7 +89,7 @@ private:
   std::list< Planet* > preferredPlanets;
 
 public:
-  ComputerPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int team );
+  ComputerPlayer( Universe* universe, Uint32 color, int team );
   
   void update(Game *);
   
@@ -104,7 +102,7 @@ public:
 
 class NeutralPlayer : public Player {
 public:
-  NeutralPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color);
+  NeutralPlayer( Universe* universe, Uint32 color);
   
   void update(Game *);
   

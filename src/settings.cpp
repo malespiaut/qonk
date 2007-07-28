@@ -72,7 +72,7 @@ Settings::init() {
  	if( !fileExists(fileName))
   {
 	  cout << "configuration was not available - using defaults" << endl;
-    setResolution(800, 600);
+    setScreenSize(800, 600);
     setupDefaultActionMap();
     return;
   }
@@ -95,7 +95,7 @@ Settings::init() {
   if (!(qonkReader = root->getLisp("qonk-config")))
   {
 	  cout << "configuration file malformed - using defaults" << endl;
-    setResolution(800, 600);
+    setScreenSize(800, 600);
     setupDefaultActionMap();
 
     delete root;
@@ -109,7 +109,7 @@ Settings::init() {
   if (configFileVersion < REQUIRED_CONFIG_FILE_VERSION)
   {
 	  cout << "configuration file version " << configFileVersion << " not supported - using default values." << endl;
-    setResolution(800, 600);
+    setScreenSize(800, 600);
     setupDefaultActionMap();
 
     delete root;
@@ -119,7 +119,7 @@ Settings::init() {
 
   qonkReader->get("screenWidth", screenWidth);
   qonkReader->get("screenHeight", screenHeight);
-  setResolution(screenWidth, screenHeight);
+  setScreenSize(screenWidth, screenHeight);
 
   qonkReader->get("fullscreen", fullscreen);
 
@@ -175,7 +175,7 @@ Settings::init() {
 }
 
 void
-Settings::setResolution( int width, int height ) {
+Settings::setScreenSize( int width, int height ) {
   screenWidth = width;
   screenHeight = height;
   gameWidth = height;
@@ -324,9 +324,24 @@ Settings::readInput(const lisp::Lisp* r,
 }
 
 void
+Settings::unset(GameAction ga)
+{
+  // Deletion is implemented by shift the value to the left
+  // and creating an empty entry in the 2nd location.
+  inputMap[ga][0] = inputMap[ga][1];
+  inputMap[ga][1].inputType = IT_NONE;
+}
+
+void
 Settings::set(GameAction ga, InputType it, int id0, int id1, int id2)
 {
-  Input &im = (inputMap[ga][0].inputType == IT_NONE) ? inputMap[ga][0] : inputMap[ga][1];
+  // Setting a new value is implemented by shifting the value to the
+  // right and applying the new values in the 1st location.
+   
+  inputMap[ga][1] = inputMap[ga][0];
+
+  // New input is always placed on the first location.	
+  Input &im = inputMap[ga][0];
 
   im.inputType = it;
   im.id0 = id0;

@@ -39,6 +39,13 @@ class MenuEntry
      * on level up or not.
      */ 
     virtual bool cancel() { return false; }
+    
+    /**
+     * Puts the underlying attribute to its default value.
+     * 
+     * Needs only be implemented by entries that support this.
+     */
+    virtual void reset() { };
 
 };
 

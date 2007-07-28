@@ -48,13 +48,11 @@ public:
   static void setFullscreen( bool b ) { fullscreen = b; }
   static bool getFullscreen() { return fullscreen; }
 
-  static void setResolution(int, int);
+  static void setScreenSize(int, int);
 
   static int getScreenWidth() { return screenWidth; }
-  static void setScreenWidth(int w) { screenWidth = w; }
 
   static int getScreenHeight() { return screenHeight; }
-  static void setScreenHeight(int h) { screenHeight = h; }
 
   static int getGameWidth() { return gameWidth; }
   static int getGameHeight() { return gameHeight; }
@@ -76,6 +74,7 @@ public:
   static void printInput(char *);
 
   static void set(GameAction, Input &);
+  static void unset(GameAction);
 
 };
 

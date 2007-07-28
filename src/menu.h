@@ -74,6 +74,8 @@ class Menu
     void next();
 
     void previous();
+    
+    void reset();
 
 };
 

@@ -10,32 +10,32 @@
 
 using namespace std;
 
-Message::Message( string message, Uint32 displayTime, Uint8 r, Uint8 g, Uint8 b ) {
-  this->message = string( "[" ) + timer.getTimeMMSS() + "] " + message;
+Message::Message( Uint32 time, string message, Uint32 displayTime, Uint8 r, Uint8 g, Uint8 b ) {
+  this->message = string( "[" ) + Timer::getTimeMMSS(time) + "] " + message;
   this->displayTime= displayTime;
   this->r = r;
   this->g = g;
   this->b = b;
 }
 
-Message::Message( string message, Uint32 displayTime, Uint32 color ) {
-  this->message = string( "[" ) + timer.getTimeMMSS() + "] " + message;
+Message::Message( Uint32 time, string message, Uint32 displayTime, Uint32 color ) {
+  this->message = string( "[" ) + Timer::getTimeMMSS(time) + "] " + message;
   this->displayTime = displayTime;
   this->r = getGreen( color );
   this->g = getRed( color );
   this->b = getBlue( color );
 }
 
-Message::Message( string message, Uint8 r, Uint8 g, Uint8 b ) {
-  this->message = string( "[" ) + timer.getTimeMMSS() + "] " + message;
+Message::Message( Uint32 time, string message, Uint8 r, Uint8 g, Uint8 b ) {
+  this->message = string( "[" ) + Timer::getTimeMMSS(time) + "] " + message;
   this->displayTime= 10000;
   this->r = r;
   this->g = g;
   this->b = b;
 }
 
-Message::Message( string message, Uint32 color ) {
-  this->message = string( "[" ) + timer.getTimeMMSS() + "] " + message;
+Message::Message( Uint32 time, string message, Uint32 color ) {
+  this->message = string( "[" ) + Timer::getTimeMMSS(time) + "] " + message;
   this->displayTime = 10000;
   this->r = getGreen( color );
   this->g = getRed( color );
@@ -89,7 +89,7 @@ Message::getDisplayTime() {
   return displayTime;
 }
 //Jacobsen - added init of fleetStrengthMessage
-Messages::Messages() : fleetStrengthMessage("Fleet strength 50%",0x808080) {
+Messages::Messages() : fleetStrengthMessage(0, "Fleet strength 50%",0x808080) {
 }
 
 Messages::~Messages() {
@@ -102,18 +102,18 @@ Messages::addMessage( Uint32 time, Message m ) {
 }
 
 void
-Messages::cleanup() {
-  while( ( size() > 0 ) && ( begin()->first + begin()->second.getDisplayTime() < timer.getTime() ) )
+Messages::cleanup(Uint32 time) {
+  while( ( size() > 0 ) && ( begin()->first + begin()->second.getDisplayTime() < time ) )
     erase( begin() );
 }
 
 void
-Messages::render() {
-  cleanup();
+Messages::render(Uint32 time) {
+  cleanup(time);
   int x = 12; 
   int y = Settings::getGameHeight() - 28;
   for( reverse_iterator i = rbegin(); i != rend(); i++ ) {
-    i->second.render(x, y, (int)timer.getTime() - (int)i->first );
+    i->second.render(x, y, (int)time - (int)i->first );
   }
   
   //Begin Jacobsen
@@ -131,31 +131,34 @@ void Messages::setFleetStrengthMessage( Message m ) {
 
 void
 MSGwon(Game *game, int nextPlanets, int nextComputerPlayers){
-	game->addMessage( 200, Message( "You have QONKuered the solar system! You won!", 20000, 0xffffff ) );
+  Uint32 time = game->getTime();
+	game->addMessage(200, Message(time, "You have QONKuered the solar system! You won!", 20000, 0xffffff ) );
 	stringstream s;
 	s << "Try again, with " << nextPlanets << " planets and " << nextComputerPlayers << " AI players!";
-	game->addMessage( 400, Message( s.str(), 20000, 0x808080 ) );
+	game->addMessage(400, Message(time, s.str(), 20000, 0x808080 ) );
 
   s.str("");
   s << "Use [" << Settings::getAsString(GA_NEXT_ROUND);
   s << "] to start the next round";
 
-	game->addMessage( 600, Message( s.str(), 40000, 0x808080 ) );
+	game->addMessage(600, Message(time, s.str(), 40000, 0x808080 ) );
 }
 
 void 
 MSGlost(Game *game) {
-	game->addMessage(0, Message( "GAME OVER!!! You lost all your planets and ships, you are dead!", 20000, 0xffffff ) );
-	game->addMessage(200, Message( "Press [R] ...", 40000, 0x808080 ) );
+	Uint32 time = game->getTime();
+  game->addMessage(0, Message(time, "GAME OVER!!! You lost all your planets and ships, you are dead!", 20000, 0xffffff ) );
+	game->addMessage(200, Message(time, "Press [R] ...", 40000, 0x808080 ) );
 }
 
 void 
 MSGstart(Game *game) {
-  	game->addMessage( 000, Message( "Let's QONK! Kick the AI players out!", 15000, 0xffffff ) );
-  	game->addMessage( 200, Message( "[Left click and drag] for multi select, [Middle click] for single select.", 10000, 0x808080 ) );
-  	game->addMessage( 400, Message( "[Right click] to send ships.", 10000, 0x808080 ) );
-  	game->addMessage( 600, Message( "[P]ause,[A]ll planets,[R]estart.", 10000, 0x808080 ) );
-  	game->addMessage( 700, Message( "[Escape] to quit", 10000, 0x808080 ) );
-  	game->addMessage( 800, Message( "[1]-[0] fleet selection (10%-100%)", 10000, 0x808080 ) );
-  	game->addMessage(1000, Message( "Initial fleet selection is 50%", 10000, 0x808080 ) );
+  Uint32 time = game->getTime();
+  game->addMessage( 000, Message(time, "Let's QONK! Kick the AI players out!", 15000, 0xffffff ) );
+  game->addMessage( 200, Message(time, "[Left click and drag] for multi select, [Middle click] for single select.", 10000, 0x808080 ) );
+  game->addMessage( 400, Message(time, "[Right click] to send ships.", 10000, 0x808080 ) );
+  game->addMessage( 600, Message(time, "[P]ause,[A]ll planets,[R]estart.", 10000, 0x808080 ) );
+  game->addMessage( 700, Message(time, "[Escape] to quit", 10000, 0x808080 ) );
+  game->addMessage( 800, Message(time, "[1]-[0] fleet selection (10%-100%)", 10000, 0x808080 ) );
+  game->addMessage(1000, Message(time, "Initial fleet selection is 50%", 10000, 0x808080 ) );
 }

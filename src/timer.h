@@ -10,8 +10,8 @@
 
 class Timer {
 private:
-  static Uint32 startTime, pauseTime;
-  static bool paused;
+  Uint32 startTime, pauseTime;
+  bool paused;
 public:
   Timer();
   
@@ -21,10 +21,8 @@ public:
   bool isPaused();
   Uint32 getTime();
   std::string getTimeMMSSHH();
-  std::string getTimeMMSS();
+  static std::string getTimeMMSS(Uint32);
 
 };
-
-static Timer timer;
 
 #endif

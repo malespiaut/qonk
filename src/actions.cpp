@@ -68,8 +68,3 @@ void ActionQueue::executeEventsBefore( Uint32 time ) {
 	}
 }
 
-void
-ActionQueue::executePastEvents() {
-	executeEventsBefore( timer.getTime() );
-}
-

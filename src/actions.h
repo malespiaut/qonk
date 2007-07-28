@@ -34,7 +34,6 @@ public:
   void executeNextEvent();
   void executeAllEvents();
   void executeEventsBefore( Uint32 time );
-  void executePastEvents();
 };
 
 #endif

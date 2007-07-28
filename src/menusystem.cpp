@@ -258,6 +258,9 @@ MenuSystem::KeyListener::keyReleased(KeyEvent &keyEvent)
 
   switch (keyEvent.getKey().getValue())
   {
+    case Key::BACKSPACE:
+        system.currentMenu->reset();
+        break;
     case Key::ESCAPE:
         system.currentMenu->cancel();
         break;

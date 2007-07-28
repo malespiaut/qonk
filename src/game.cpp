@@ -1,6 +1,7 @@
 #include "game.h"
 #include "gameoptions.h"
 
+#include "timer.h"
 #include "planets.h"
 #include "players.h"
 #include "universe.h"
@@ -15,54 +16,50 @@
 using namespace std;
 
 Game::Game(GameOptions &go)
-  : gameOptions(go), nextNumberOfPlanets(0), nextNumberOfComputerPlayers(0)
+  : gameOptions(go), nextNumberOfPlanets(0), nextNumberOfComputerPlayers(0), timer(new Timer()),
+    players(0), universe(0), messages(0), selection(0)
 {
   int numberOfPlanets = gameOptions.getPlanets();
   int numberOfComputerPlayers = gameOptions.getPlayers();
 
-	  state = PLAYING;
-    quit = false;
+  state = PLAYING;
+  quit = false;
+  timer->start();
 
-     x = Settings::getScreenWidth()/2;
-     y = Settings::getScreenHeight()/2;
-     xp = xn = yp = yn = 0;
+  // Initialize selection
+  x = Settings::getScreenWidth()/2;
+  y = Settings::getScreenHeight()/2;
+  xp = xn = yp = yn = 0;
 
-     universe = new Universe( numberOfPlanets );
+  universe = new Universe( numberOfPlanets );
 
-     players = new Players( universe );
-     universe->actionQueue->scheduleAction( 1000, new UpdatePlayersStatsAction( players) );
+  players = new Players( universe );
+  universe->actionQueue->scheduleAction( 1000, new UpdatePlayersStatsAction( players) );
 
-     Planets::iterator planetIterator = universe->planets->begin();
-     humanPlayer = new HumanPlayer( universe, &(*planetIterator), 3, 0xffffff, 1);
-     humanPlayer->setVisible(true);
-     players->push_back(humanPlayer);
+  humanPlayer = new HumanPlayer( universe, 0xffffff, 1);
+  humanPlayer->setVisible(true);
+  universe->claim(0, humanPlayer, 1, 3);
+  players->push_back(humanPlayer);
+  
+  bool vis = gameOptions.getEnemyVisibility();
+     
+  int hueCounter = rand() % 360;
+  for (int i=0;i<numberOfComputerPlayers;i++)
+  {
+    Player *newPlayer = new ComputerPlayer( universe, HSVtoRGB( hueCounter, 0.9, 0.9 ), 2);
+    newPlayer->setVisible(vis);
+    universe->claim(0, newPlayer, 1, 3);
+    hueCounter = ( hueCounter + 360 / numberOfComputerPlayers ) % 360;
+    players->push_back(newPlayer);
+  }
 
-     planetIterator++;
+  NeutralPlayer *neutral = new NeutralPlayer(universe, 0x808080);
+  neutral->setVisible(vis);
+  universe->claimRemaining(0, neutral, 3, 2);
+  players->push_back(neutral);
 
-     int hueCounter = rand() % 360;
-        int counter = 0;
-        do {
-                Player *newPlayer;
-
-                if( counter < numberOfComputerPlayers ) {
-                        newPlayer = new ComputerPlayer( universe, &(*planetIterator), 3, HSVtoRGB( hueCounter, 0.9, 0.9 ), 2);
-
-                        counter++;
-                        hueCounter = ( hueCounter + 360 / numberOfComputerPlayers ) % 360;
-                } else
-                        if( !(&(*planetIterator))->getMoon() )
-                                newPlayer = new NeutralPlayer( universe, &(*planetIterator), 1 + rand() % 3, 0x606060 );
-                        else
-                                newPlayer = new NeutralPlayer( universe, &(*planetIterator), 1 + rand() % 2, 0x606060 );
-                players->push_back(newPlayer);
-
-                planetIterator++;
-        } while( planetIterator != universe->planets->end() );
-
-        messages = new Messages();
-        selection = new Selection();
-
-  setEnemyVisibility(gameOptions.getEnemyVisibility());
+  messages = new Messages();
+  selection = new Selection();
 }
 
 Game::~Game()
@@ -71,6 +68,7 @@ Game::~Game()
   delete universe;
   delete messages;
   delete selection;
+  delete timer;
 }
 
 bool
@@ -82,13 +80,14 @@ Game::run(bool menuVisible)
   // TODO: Find a way to live without the next line.
   setPaused(menuVisible);
 
-	if (timer.isPaused())
+	if (timer->isPaused())
     return true;
 
   moveCursor(xp - xn, yp - yn);
 
+  Uint32 time = getTime();
   // update the universe
-  universe->update();
+  universe->update(time);
 
   // let players update their states
   players->update(this);
@@ -123,7 +122,7 @@ Game::run(bool menuVisible)
 void
 Game::handle(GameAction gameAction, int value)
 {
-  if (timer.isPaused())
+  if (timer->isPaused())
     return;
 
   switch (gameAction)
@@ -268,19 +267,7 @@ void
 Game::setFleetStrength(int str)
 {
   humanPlayer->setFleetStrength(str);
-/*
-  stringstream s;
-  if (str == 1)
-    s << "Setting to single ship mode.";
-  else
-    {
-      s << "Setting fleet strength to " << str << "%";
-    }
-
-  messages->addMessage( timer.getTime(), Message(s.str(), 20000, 0x808080));
-  */  
   
-  //Begin Jacobsen
   stringstream s;
   if (str == 1)
 	  s << "Single ship mode";
@@ -289,15 +276,14 @@ Game::setFleetStrength(int str)
 	  s << "Fleet strength " << str << "%";
   }
 
-  messages->setFleetStrengthMessage( Message(s.str(), 0x808080) );
-  //End Jacobsen
+  messages->setFleetStrengthMessage( Message(getTime(), s.str(), 0x808080) );
 }
 
 void
 Game::setPaused(bool p)
 {
-  if (p ^ timer.isPaused())
-    timer.pause();
+  if (p ^ timer->isPaused())
+    timer->pause();
 
 }
 
@@ -316,7 +302,7 @@ Game::setEnemyVisibility(bool visible)
   stringstream s;
   s << "Made enemies " << (visible ? "visible" : "invisible");
 
-  messages->addMessage(timer.getTime(), Message(s.str(), 20000, 0x808080));
+  messages->addMessage(timer->getTime(), Message(getTime(), s.str(), 20000, 0x808080));
 }
 
 void
@@ -334,7 +320,7 @@ Game::selectNearestPlanet(int x, int y)
 void
 Game::moveToNearestPlanet(int x, int y)
 {
-  humanPlayer->moveToNearestPlanet(x, y);
+  humanPlayer->moveToNearestPlanet(getTime(), x, y);
 }
 
 void
@@ -363,21 +349,29 @@ Game::endSelection(int x, int y)
 void
 Game::addMessage(int offset, Message msg)
 {
-  messages->addMessage( timer.getTime() + offset, msg);
+  messages->addMessage( timer->getTime() + offset, msg);
+}
+
+Uint32
+Game::getTime() const
+{
+  return timer->getTime();
 }
 
 void
 Game::render()
 {
-        universe->renderBackground();
-        players->render();
+  Uint32 time = getTime();
+  
+  universe->renderBackground(time);
+  players->render();
 
-        humanPlayer->render();
-        selection->render();
+  humanPlayer->render();
+  selection->render();
 
-        universe->renderForeground();
+  universe->renderForeground(time);
 
-        messages->render();
+  messages->render(time);
 
-        Canvas::drawCursor(x, y);
+  Canvas::drawCursor(x, y);
 }

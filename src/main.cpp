@@ -108,8 +108,7 @@ Main::applyVideoOptions(VideoOptions &videoOptions)
       showMenu();
 
       Settings::setFullscreen(videoOptions.getFullscreen());
-      Settings::setScreenWidth(videoOptions.getScreenWidth());
-      Settings::setScreenHeight(videoOptions.getScreenHeight());
+      Settings::setScreenSize(videoOptions.getScreenWidth(), videoOptions.getScreenHeight());
 
       Canvas::initScreen();
 
@@ -169,12 +168,11 @@ void
 Main::renderFPS()
 {
 	stringstream s;
-	s << timer.getTimeMMSSHH();
-	
+  
 	fpsCounter++;
 
-	s << " (" << fps << " FPS)";
-	Canvas::drawText( 13, Settings::getGameHeight() - 30, s.str().c_str(), 0x80, 0x80, 0x80 );
+	s << fps;
+	Canvas::drawText( Settings::getScreenWidth() - 32, 5, s.str().c_str(), 0x80, 0x80, 0x80 );
 
 	if( SDL_GetTicks() - lastTicks >= 1000 ) {
 		lastTicks = SDL_GetTicks();
@@ -195,14 +193,11 @@ Main::run()
     Canvas::drawBox(0, 0, Settings::getScreenWidth(), Settings::getScreenHeight(), 0, 0, 0);
 
     if (game)
-    {
       game->render();
-    }
-
     menuManager->render();
     renderFPS();
     Canvas::updateScreen();
-		
+    
     b = menuManager->update();
 
     if (game)
@@ -280,5 +275,13 @@ Main::finishSensing(GameAction ga, bool completed)
   }
 
   driver->setSenseMode(false);
+}
+
+void
+Main::resetGameAction(GameAction ga)
+{
+   Settings::unset(ga);
+   driver->setSenseMode(true);
+   driver->setSenseMode(false);
 }
 

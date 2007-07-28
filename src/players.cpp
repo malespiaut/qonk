@@ -17,27 +17,18 @@
 // ##### PLAYER #####
 using namespace std;
 
-Player::Player() : team(0) {
-  ships = new Ships();
-  playerState = ALIVE;
-}
-
-Player::Player( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int t ) : visible(false), team(t) {
-
+Player::Player( Universe* universe, Uint32 color, int t ) : visible(false), team(t)
+{
   ships = new Ships();
   playerState = ALIVE;
   this->universe = universe;
-  addShips( homePlanet, numberOfShips );
   setColor( color );
-		
 }
 
 void
-Player::addShips( Planet* planet, int numberOfShips ) {
-
-  for( int i = 0; i < numberOfShips; i++ )
-		ships->push_back( new Ship( this, planet ) );
-		
+Player::addShip(Uint32 time, Planet * const planet)
+{
+  ships->push_back(new Ship(this, planet, time ));
 }
 
 void
@@ -80,9 +71,9 @@ bool
 Player::renderStats( int height ) {
   int counter = 4;
   for( Planets::iterator i = universe->planets->begin(); i != universe->planets->end(); i++ ) {
-    if( i->getOwner() == this ) {
+    if( (*i)->getOwner() == this ) {
       int size = 3;
-      if( i->getMoon() ) size = 2;
+      if( (*i)->getMoon() ) size = 2;
       Canvas::drawPlanetMapped(counter, height + 5, size, color );
       counter+= size * 2 + 3;
     }
@@ -112,8 +103,8 @@ double
 Player::getPoints() {
   double result = 0;
   for( Planets::iterator i = universe->planets->begin(); i != universe->planets->end(); i++ ) {
-    if( i->getOwner() == this ) {
-      if( i->getMoon() ) { 
+    if( (*i)->getOwner() == this ) {
+      if( (*i)->getMoon() ) { 
         result += 0.999;
       } else {
         result += 2;
@@ -141,8 +132,8 @@ Player::getColor() {
 
 // ##### HUMANPLAYER #####
 
-HumanPlayer::HumanPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int team ) :
-Player( universe, homePlanet, numberOfShips, color, team ) {
+HumanPlayer::HumanPlayer( Universe* universe, Uint32 color, int team ) :
+Player( universe, color, team ) {
   playerType = Player::HUMAN;
   fleetStrength = 50;
 }
@@ -190,7 +181,7 @@ HumanPlayer::selectPlanetAt(int x, int y)
 }
 
 void
-HumanPlayer::moveToNearestPlanet(int x, int y)
+HumanPlayer::moveToNearestPlanet(Uint32 time, int x, int y)
 {
   double pointerX = ( (double)x - Settings::getGameOffsetX() ) / Settings::getGameWidth();
   double pointerY = (double)y / Settings::getGameHeight();
@@ -199,7 +190,7 @@ HumanPlayer::moveToNearestPlanet(int x, int y)
   if( closestPlanet != NULL ) {
     for (list <Planet *>::iterator i = occupiedPlanets.begin(); i != occupiedPlanets.end(); i++) {
       if ((*i)->isSourceSelected())
-        (*i)->moveResidentsTo(closestPlanet, fleetStrength);
+        (*i)->moveResidentsTo(time, closestPlanet, fleetStrength);
     }
   }
 }
@@ -216,6 +207,9 @@ HumanPlayer::update(Game *game) {
     return;
     
   removeDeadShips();
+
+  // TODO: Unify this with the other player types.  
+  ships->update(game->getTime());
 	
 }
 
@@ -234,8 +228,8 @@ HumanPlayer::selectAllPlanets() {
 
 // ##### COMPUTERPLAYER #####
 
-ComputerPlayer::ComputerPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int team ) :
-Player( universe, homePlanet, numberOfShips, color, team ) {
+ComputerPlayer::ComputerPlayer( Universe* universe, Uint32 color, int team ) :
+Player( universe, color, team ) {
   playerType = Player::COMPUTER;
   
   // give the computer player some values for determining strategic actions
@@ -260,13 +254,17 @@ void
 ComputerPlayer::update(Game *game) {
   if( playerState == ALIVE ) {
     if( getPoints() == 0 ) {
-      game->addMessage(0, Message( "AI player is dead", color));
+      game->addMessage(0, Message(game->getTime(), "AI player is dead", color));
       playerState = DEAD;
       return;
     }
   } else
     return;
   removeDeadShips();
+  
+  // TODO: Unify this with the other player types.  
+  ships->update(game->getTime());
+  
 }
 
 
@@ -397,14 +395,18 @@ ComputerPlayer::action( const Uint32& time ) {
 
 // ##### NEUTRALPLAYER #####
 
-NeutralPlayer::NeutralPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color ) :
-Player( universe, homePlanet, numberOfShips, color, 0 ) {
+NeutralPlayer::NeutralPlayer( Universe* universe, Uint32 color ) :
+Player( universe, color, 0 ) {
   playerType = Player::NEUTRAL;
 }
 
 void
 NeutralPlayer::update(Game *game) {
   removeDeadShips();
+  
+   // TODO: Unify this with the other player types.  
+  ships->update(game->getTime());
+  
 }
 
 // ##### PLAYERS #####

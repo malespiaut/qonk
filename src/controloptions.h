@@ -29,6 +29,8 @@ public:
   void startSensing();
 
   void finishSensing(GameAction, bool);
+  
+  void reset(GameAction);
 };
 
 #endif

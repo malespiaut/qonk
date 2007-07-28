@@ -4,12 +4,9 @@
 
 using namespace std;
 
-Uint32 Timer::startTime;
-Uint32 Timer::pauseTime;
-bool Timer::paused;
-
 Timer::Timer() {
   start();
+  pause();
 }
 
 void
@@ -42,10 +39,11 @@ string
 Timer::getTimeMMSSHH() {
   if( paused )
     return "PA:US:ED";
-  stringstream s;
+
   int hundreds = ( getTime() % 1000 ) / 10;
   int seconds = getTime() / 1000;
   int minutes = seconds / 60;
+  stringstream s;
   seconds = seconds % 60;
   if( minutes < 10 )
     s << "0";
@@ -60,11 +58,9 @@ Timer::getTimeMMSSHH() {
 }
 
 string 
-Timer::getTimeMMSS() {
-  if( paused )
-    return "PAUSED";
-	stringstream s;
-	int seconds = getTime() / 1000;
+Timer::getTimeMMSS(Uint32 time) {
+ stringstream s;
+	int seconds = time / 1000;
 	int minutes = seconds / 60;
 	seconds = seconds % 60;
 	if( minutes < 10 )

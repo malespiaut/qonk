@@ -14,11 +14,10 @@
 
 /* ##### SHIP ##### */
 
-Ship::Ship( Player* owner, Planet* planet ) {
+Ship::Ship( Player* owner, Planet *planet, Uint32 time ) {
 	this->owner = owner;
 	this->planet = planet;
-	planet->addResident( this, timer.getTime() );
-	planet->updateShipLocations();
+	planet->addResident( this, time );
 	selected = false;
 	shipState = RESIDENT;
 	speed = 0.003 + frand( 0.002 );
@@ -64,7 +63,7 @@ Ship::moveTo( Uint32 time, Planet* destinationPlanet, ActionQueue* actionQueue )
 	fromTime = time;
 	toTime = time + 100;
 	fromLocation = location;
-	Coordinate destinationLocation = destinationPlanet->getLocation( time + 100 );
+	Coordinate destinationLocation = destinationPlanet->getLocation();
 	double distance = fromLocation.distance( destinationLocation );
 	if( distance < speed ) {
 	
@@ -123,16 +122,23 @@ Ship::setLocation( const Coordinate& c ) {
 	location = c;
 }
 
-Coordinate
-Ship::getLocation() const {
-	if( shipState == RESIDENT )
-		return location;
-	else {
-		Coordinate result;
-		result.setX( fromLocation.getX() + ( toLocation.getX() - fromLocation.getX() ) * ( timer.getTime() - fromTime ) / ( toTime - fromTime ) );
-		result.setY( fromLocation.getY() + ( toLocation.getY() - fromLocation.getY() ) * ( timer.getTime() - fromTime ) / ( toTime - fromTime ) );
-		return result;
+void
+Ship::update(Uint32 time) 
+{
+	if( shipState != RESIDENT )
+  {
+		orbitLocation.setX( fromLocation.getX() + ( toLocation.getX() - fromLocation.getX() ) * ( time - fromTime ) / ( toTime - fromTime ) );
+		orbitLocation.setY( fromLocation.getY() + ( toLocation.getY() - fromLocation.getY() ) * ( time - fromTime ) / ( toTime - fromTime ) );
 	}
+}
+
+Coordinate
+Ship::getLocation() const
+{
+  if( shipState == RESIDENT )
+    return location;
+  else
+    return orbitLocation;
 }
 
 Ship::ShipStates
@@ -160,7 +166,7 @@ Ship::getOwner() const {
 	return owner;
 }
 
-Planet*
+Planet *
 Ship::getPlanet() const {
 	return planet;
 }
@@ -187,10 +193,10 @@ Ships::removeDeadShips() {
 }
 
 void
-Ships::moveTo( Planet* destinationPlanet, ActionQueue* actionQueue ) {
+Ships::moveTo( Uint32 time, Planet* destinationPlanet, ActionQueue* actionQueue ) {
 	for( iterator i = begin(); i != end(); i++ ) {
 		if( (*i)->getSelected() )
-			(*i)->moveTo( timer.getTime() + rand() % 500, destinationPlanet, actionQueue );
+			(*i)->moveTo( time + rand() % 500, destinationPlanet, actionQueue );
 	}
 }
 
@@ -206,12 +212,20 @@ Ships::numberSelectedShips() {
 
 void
 Ships::render( Uint32 color ) const {
-	for( const_iterator i = begin(); i != end(); i++ ) {
-	 	(*i)->renderSelection();
-	}
-	for( const_iterator i = begin(); i != end(); i++ ) {
-		(*i)->render(color );
-	}
+  for( const_iterator i = begin(); i != end(); i++ ) {
+    (*i)->renderSelection();
+  }
+  for( const_iterator i = begin(); i != end(); i++ ) {
+    (*i)->render(color );
+  }
+}
+
+void
+Ships::update(Uint32 time)
+{
+  for( const_iterator i = begin(); i != end(); i++ ) {
+    (*i)->update(time);
+  }
 }
 
 void

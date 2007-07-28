@@ -1,4 +1,5 @@
 0.0.3 - NOT_RELEASED_YET - 
+Features:
  - new project page: http//qonk.sf.net
  - public SVN repository: https://qonk.svn.sf.net/svnroot/qonk
  - freely chosable input (mouse, keyboard, gamepad, ...)
@@ -8,6 +9,14 @@
  - basic menu system with many working parts
  - autotools build system
  - single ship mode
+Bugs fixed:
+ - do not call SDL functions in Timere before SDL_Init because of static
+   initialization
+ - properly update screen size changes
+ - allow removing input mappings
+other:
+ - simplified initial planet claiming
+ - remove need for static Timer variable
 
 rs-2007-02-17 - 2007-02-17 A modificated version
 Modificated qonk based on 0.0.2beta1 by Robert Schuster:

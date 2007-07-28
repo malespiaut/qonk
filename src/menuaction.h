@@ -30,6 +30,8 @@ class MenuAction
     /** Returns true if some operation was cancelled or false if not.
      */ 
     virtual bool cancel() { return false; }
+    
+    virtual void reset() { }
 };
 
 class QuitAction : public MenuAction

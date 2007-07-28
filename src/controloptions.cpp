@@ -30,6 +30,12 @@ ControlOptions::finishSensing(GameAction ga, bool b)
   main.finishSensing(ga, b);
 }
 
+void
+ControlOptions::reset(GameAction ga)
+{
+    main.resetGameAction(ga);
+}
+
 class ControlAction : public MenuAction
 {
   ControlOptions &controlOptions;
@@ -79,6 +85,13 @@ class ControlAction : public MenuAction
         sensing = false;
       }
       return sensing;
+    }
+    
+    void reset()
+    {
+      controlOptions.reset(gameAction);
+      label->setCaption(base + Settings::getAsString(gameAction));
+      label->adjustSize();
     }
 };
 

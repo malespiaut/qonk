@@ -31,7 +31,6 @@ SDLDriver::SDLDriver(InputHandler &ih) : inputHandler(ih), sensedInput(0)
 
     sdlInput = new gcn::SDLInput();
 
-    timer.start();
     atexit( SDL_Quit );
 
     if ( TTF_Init() < 0 ) {

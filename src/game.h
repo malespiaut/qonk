@@ -10,6 +10,7 @@
 #define GAME_H
 
 #include "input.h"
+#include "timer.h"
 
 class Universe;
 class Players;
@@ -39,6 +40,8 @@ public:
         void render();
 
         void setPaused(bool);
+        
+        Uint32 getTime() const;
 
 private:
         void moveCursor(int, int);
@@ -70,10 +73,10 @@ private:
         int xp, xn, yp, yn;
 
         Universe *universe;
-        Players *players;
         HumanPlayer *humanPlayer;
         Messages *messages;
-        
+        Timer *timer;
+        Players *players;
         Selection *selection;
 
         enum States { PLAYING, LOST, WON };
