@@ -1,0 +1,21 @@
+0.0.3 - NOT_RELEASED_YET - 
+ - freely chosable input (mouse, keyboard, gamepad, ...)
+ - config file
+ - advance to next level without leaving game
+ - upgraded ship and universe painting
+ - basic menu system with many working parts
+ - autotools build system
+ - single ship mode
+
+rs-2007-02-17 - 2007-02-17 A modificated version
+Modificated qonk based on 0.0.2beta1 by Robert Schuster:
+ - ships selection by percentage
+ - the bigger the planet the shorter the built cycle
+
+0.0.2beta1 - 2003 - Second public release
+Another slightly updated version by Anthony.
+http://anthony.liekens.net/pub/files/qonk-0.0.2beta1.tar.gz
+
+0.0.1 - 2003 - First public release
+Initial version by Anthony Liekens
+http://anthony.liekens.net/pub/files/qonk-0.0.1.tar.gz
