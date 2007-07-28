@@ -3,8 +3,6 @@
 #include <iostream>
 #include "math.h"
 
-#include <SDL/SDL.h>
-
 #include "coordinate.h"
 #include "planets.h"
 #include "timer.h"
@@ -92,7 +90,7 @@ Ship::moveTo( Uint32 time, Planet* destinationPlanet, ActionQueue* actionQueue )
 }
 
 void
-Ship::render( SDL_Surface* screen, Uint32 color ) const {
+Ship::render( Uint32 color ) const {
 	Coordinate loc = getLocation();
 	if( shipState == RESIDENT ) {
 		Coordinate planetLocation = planet->getLocation();
@@ -103,7 +101,7 @@ Ship::render( SDL_Surface* screen, Uint32 color ) const {
 }
 
 void
-Ship::renderSelection( SDL_Surface* screen ) const {
+Ship::renderSelection() const {
 	Coordinate loc = getLocation();
 	if( selected )
 	  Canvas::drawSelection(loc);
@@ -207,12 +205,12 @@ Ships::numberSelectedShips() {
 }
 
 void
-Ships::render( SDL_Surface* screen, Uint32 color ) const {
+Ships::render( Uint32 color ) const {
 	for( const_iterator i = begin(); i != end(); i++ ) {
-	 	(*i)->renderSelection( screen );
+	 	(*i)->renderSelection();
 	}
 	for( const_iterator i = begin(); i != end(); i++ ) {
-		(*i)->render( screen, color );
+		(*i)->render(color );
 	}
 }
 

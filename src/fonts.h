@@ -6,7 +6,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <iostream>
-using namespace std;
 
 class Font {
 private:

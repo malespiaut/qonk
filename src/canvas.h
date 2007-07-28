@@ -10,7 +10,10 @@
 
 #include <SDL/SDL.h>
 
+#include "guichan/guichan/sdl.hpp"
+
 class Coordinate;
+class Font;
 
 class Canvas
 {
@@ -38,11 +41,41 @@ class Canvas
 
     static void drawBuildProgress(Coordinate&, int, double);
 
-    static SDL_Surface *initScreen();
+    static void drawText(int, int, const char *, int, int, int, int a=255);
+
+    static int getFontHeight();
+
+    static void drawBox(int x, int y, int w, int h, int r, int g, int b);
+
+    static void drawRadar();
+
+    static void drawSun();
+
+    static void drawStar(int x, int y, int brightness);
+ 
+    static void drawSonar(Coordinate coord, int size, double percentage, int r, int g, int b, bool circle);
+
+    static void drawPlayerStat(int size, int index, int previousValue, int currentValue, int r, int g, int b);
+
+    static void drawMouseSelection(Coordinate &c1, Coordinate &c2);
+
+    static void drawCursor(int, int);
+
+    static void updateScreen();
+
+    static void initScreen();
+
+    static void shutdown();
+
+    static gcn::SDLGraphics *getSDLGraphics();
 
   private:
 
+    static gcn::SDLGraphics *sdlGraphics;
+
     static SDL_Surface* main;
+
+    static Font *font;
 
 };
 

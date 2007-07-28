@@ -6,7 +6,6 @@
 class Stars;
 class Planet;
 class Planets;
-class Messages;
 class ActionQueue;
 class AnimationQueue;
 
@@ -16,18 +15,19 @@ public:
   Planets* planets;
   ActionQueue* actionQueue;
   AnimationQueue* animationQueue;
-  Messages* messages;
   
   Planet* currentSelectedPlanet;
   
   Universe();
   Universe( int nrPlanets );
   ~Universe();
+
+  void highlightNearestPlanet(int x, int y);
   
   void update();
   
-  void renderBackground( SDL_Surface* screen );
-  void renderForeground( SDL_Surface* screen );
+  void renderBackground();
+  void renderForeground();
 };
 
 #endif

@@ -3,23 +3,31 @@
 #ifndef SELECTION_H
 #define SELECTION_H
 
-#include <SDL/SDL.h>
-
-class Coordinate;
+#include "coordinate.h"
 
 class Selection {
-private:
 	Coordinate c1, c2;
 	enum SelectionStates { NOT_SELECTING, SELECTING };
 	SelectionStates state;
+
 public:
 	Selection();
-	bool update();
-	void render( SDL_Surface *screen );
+
+        void start(int, int);
+        void update(int, int);
+        void end();
+
+	void render();
+
 	double getMinX() const;
 	double getMaxX() const;
+
 	double getMinY() const;
 	double getMaxY() const;
+
+  bool isEmpty() const;
+
+  bool isSelecting() const;
 };
 
 #endif

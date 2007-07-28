@@ -1,0 +1,28 @@
+About this branch
+-----------------
+
+This development branch has been created on 2007-06-12 to abstract the
+way Qonk handles its input. The result of this work should be that it
+will be much easier to change input mappings. This will allow playing Qonk
+properly on devices with only a single mouse button or no keyboard.
+
+Scope:
+------
+
+ - remove direct access to keysym values [done]
+ - introduce event layer which consists of stuff like quit game,
+   next level, set fleet strength [done]
+ - introduce input mapping [done]
+ - allow 2 inputs for one game action [done]
+ - read input mapping from config file [done]
+ - write input mapping to config file [done]
+ - write functions that creates a human readable string for an input
+   * one that can be used in messages like "press the [N] key for next level"
+   * one that can be used to present a mapping in detail: "cursor up: mouse y-" [done]
+ - introduce graphical items to trigger the events (perhaps buttons) [postponed]
+ - update game manual [done]
+
+Status:
+-------
+
+- Basic input abstraction complete.

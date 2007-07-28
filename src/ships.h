@@ -4,7 +4,6 @@
 #define SHIPS_H
 
 #include <list>
-using namespace std;
 
 #include <SDL/SDL.h>
 
@@ -40,8 +39,8 @@ public:
   
   void moveTo( Uint32, Planet*, ActionQueue* );
   
-  void render( SDL_Surface* screen, Uint32 color ) const;
-  void renderSelection( SDL_Surface* screen ) const;
+  void render( Uint32 color ) const;
+  void renderSelection( ) const;
   
   double distance( Ship* );
   
@@ -58,12 +57,12 @@ public:
   double getDirection() const;
 };
 
-class Ships : public list< Ship* > {
+class Ships : public std::list< Ship* > {
 public:
 
   void removeDeadShips();
 
-  void render( SDL_Surface* screen, Uint32 color ) const;
+  void render( Uint32 color ) const;
   
   void moveTo( Planet* destination, ActionQueue* actionQueue );
   int numberSelectedShips();

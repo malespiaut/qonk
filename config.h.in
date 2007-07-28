@@ -12,6 +12,9 @@
 /* Define to 1 if you have the `SDL_gfx' library (-lSDL_gfx). */
 #undef HAVE_LIBSDL_GFX
 
+/* Define to 1 if you have the `SDL_image' library (-lSDL_image). */
+#undef HAVE_LIBSDL_IMAGE
+
 /* Define to 1 if you have the `SDL_ttf' library (-lSDL_ttf). */
 #undef HAVE_LIBSDL_TTF
 
@@ -26,6 +29,9 @@
 
 /* Define to 1 if you have the <SDL/SDL.h> header file. */
 #undef HAVE_SDL_SDL_H
+
+/* Define to 1 if you have the <SDL/SDL_image.h> header file. */
+#undef HAVE_SDL_SDL_IMAGE_H
 
 /* Define to 1 if you have the <SDL/SDL_ttf.h> header file. */
 #undef HAVE_SDL_SDL_TTF_H

@@ -7,7 +7,6 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-using namespace std;
 
 class Timer {
 private:
@@ -21,8 +20,8 @@ public:
   
   bool isPaused();
   Uint32 getTime();
-  string getTimeMMSSHH();
-  string getTimeMMSS();
+  std::string getTimeMMSSHH();
+  std::string getTimeMMSS();
 
 };
 

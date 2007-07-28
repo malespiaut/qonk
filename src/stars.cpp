@@ -1,9 +1,8 @@
 // Copyright 2005 by Anthony Liekens anthony@liekens.net
 
-#include <SDL/SDL_gfxPrimitives.h>
-
 #include "coordinate.h"
 #include "stars.h"
+#include "canvas.h"
 
 // ##### STAR METHODS #####
 
@@ -14,8 +13,8 @@ Star::Star() {
 }
 
 void
-Star::render( SDL_Surface *screen ) const {
-	pixelRGBA( screen, c.getXMapped(), c.getYMapped(), brightness + rand() % 64, brightness + rand() % 64, brightness + rand() % 64, 255 );
+Star::render( ) const {
+    Canvas::drawStar(c.getXMapped(), c.getYMapped(), brightness);
 }
 
 // ##### STARS METHODS #####
@@ -34,8 +33,8 @@ Stars::addStars( int n ) {
 }
 
 void 
-Stars::render( SDL_Surface* screen ) const {
+Stars::render( ) const {
 	for( const_iterator i = begin(); i != end(); i++ )
-		i->render( screen );
+		i->render( );
 }
 

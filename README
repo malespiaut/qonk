@@ -1,5 +1,5 @@
-Qonk
-----
+Qonk 0.0.3
+==========
 
 Qonk is a small build-and-conquer strategy game with very simple rules. A
 complete game only lasts for a few minutes and can be a fun break away from
@@ -18,64 +18,96 @@ Anthony Liekens.
 
 Dependencies
 ------------
-To compile the program you will need to install SDL, SDL_ttf and SDL_gfx.
-Just do a simple "make", and the program should be compiling.
+To compile the program you will need to install SDL, SDL_ttf and SDL_gfx. It is
+built using GNU Autoconf. In a published tarball you only need to execute
 
-Qonk-rs
--------
-Qonk-rs is a simple functional change of the original name to denote that
-I (Robert Schuster) modified it. Additionally I did not add a version number
-but used the release date instead.
+  ./configure
+  make
+  make install
 
-Modifications
+You get helpful error messages if something is not correct with the
+dependencies.
+
+If you want to built the sources from SVN you need to issue ./autogen.sh and
+have the autotools installed (GNU Automake, GNU Autoconf, GNU libtool).
+
+How to play
 -------------
-(2007-02-17 Robert Schuster <robertschuster@fsfe.org>)
 
-Starting from the 0.0.2beta1 code[0] a simpler way of selecting the 
-ships has been implemented. Originally you had to draw a box around the
-ships to form your fleet. Now you draw a box around your planets(use 
-the left mouse button) or select a single planet (currently with the middle
-mouse button) and confirm the move with a right-click on the target.
+Select a group of planets to put their ships into your selection for the next
+move. Now do a right-click near the planet where you want to send you fleet to.
+You can attack neutral (grey), enemy (some color) and reinforce your own planets
+(the white ones).
 
-In this moment a pre-defined percentag of the ships at each planet will 
-head towards the target. You can change the percentage any time by 
-pressing the number keys (1 -> 10%, ..., 9 -> 90%, 0 -> 100%).
+The number of ships starting from a planets depends on the number of ships being
+stationed there and the current fleet strength setting. In the beginning the
+strength is set to 50%. That means that half of the ships on each planets will
+take off when you order them to move. You can choose other strength settings by
+pressing the number keys (1 -> 10%, 9 -> 90%, 0->100%). If you press the 's' key
+you are in single ship mode. This means that on each move order one ship leaves
+from the selected planets (there has to be at least one stationed, though).
 
-If you know galcon you know how it works.
+Besides setting the strength to certain values you can lower or higher the
+strength by using the mouse wheel. Below 10% comes the single ship mode,
+when requesting to lower the strength it switches to 100%. The same happens in
+the reverse order when you increase the strength and are at 100%.
 
-Ah yes. The second small modification changes the way ship build time
-is calculated. It is simple: The bigger the planet the shorter the build
-time. Unfortunately I haven't touched the AI to hunt for the rich planets
-first. Any volunteers?
+New ships are continuisly built on the planets (and moons) you own. Bigger
+planets usually built ships faster than smaller ones.
+
+Other options
+-------------
+
+You can toggle displaying of enemy ships by pressing the 'e' key.
+
+If you see yourself losing and want to retry, press 'r'. If you have won instead
+press 'n' to start the next round.
+
+Press 'f' to switch between fullscreen and windowed mode. In windowed mode you
+need to make sure that the mouse cannot leave the game's window. Press 'g' to
+activate input grabbing and press it again if you want to release the input.
+
+Last but not least 'p' can be used to pause and unpause the game and 'ESC' quits
+it.
+
+Command line options
+--------------------
+
+Start the game with qonk <numberOfPlanets> <numberOfComputerPlayers> to run a
+game with such a universe.
+
+Config file
+-----------
+
+On GNU/Linux and other POSIX-like systems a config file is written in your
+home directory at .qonk/qonk.config.
+
+The format is LISP-like (you remember it from SuperTuxKart probably :) ). At the
+moment editing the config file is the only possibility to switch the various
+of the game except for the fullscreen mode state and the game's progress which
+are saved on exit.
+
+If you feel sufficiently experienced you can change the input configuration of
+the game. Don't use escape or g in any of your mappings, because those are
+hardcoded to quitting and toggling the input grab.
+
+Development
+-----------
+
+Plans are there to add a menu system, some GUI components and perhaps
+a single-computer multiplayer mode. Feel free to contact the development team
+via the mailing-list.
 
 Issues
 ------
 - You cannot select ships which are already in the vasts of space.
 
-Q & A
------
+Homepage
+--------
 
-Q: You have stolen an idea from galcon.
-A: Thanks goodness software ideas are not patentable (at least in europe). It
-   doesn't do galcon any harm if I implement a feature that they have and I like.
-   So the idea is not *stolen* it has spread.
+http://qonk.sf.net
 
-Q: What is your relation with galcon.
-A: Nothing. I played it a while found it nice but found it inacceptable (for me)
-   that it is not free software.
+Project page
+-------------
 
-Q: What is your relation with the original QONK.
-A: People on happypenguin.org wrote about it in the comments for galcon. So I
-   downloaded, compiled and played it. I found it funny and wanted to add a few
-   features. At first I wanted to see whether they make sense for QONK (I think
-   they do) and then I wanted to push this back into the free and open-source
-   software realm in the hope that someone else will add even more good stuff.
-
-Q: Are you planning to do more work on QONK?
-A: No. I don't have the time. However I would like to see that others pick it
-   up where I left or modify the original source to their needs. QONK is
-   well-written, add a bit more abstraction to e.g. the input handling and
-   one can push it much farther and make it the second best free software
-   time killer (after Frozen Bubble ;)).
-
-[0] - http://anthony.liekens.net/pub/files/qonk-0.0.2beta1.tar.gz
+http://sf.net/projects/qonk

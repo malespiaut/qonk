@@ -5,11 +5,7 @@
 
 #include <list>
 
-#include <SDL/SDL.h>
-
 #include "actions.h"
-
-using namespace std;
 
 class Ship;
 class Universe;
@@ -27,7 +23,7 @@ private:
 	int size;
 	bool isAMoon, selected, sourceSelected, nearestPlanet;
 	Planet* mother;
-	list< Ship* > residentShips;
+	std::list< Ship* > residentShips;
 	Uint32 buildStartTime, buildEndTime;
 	
 public:
@@ -41,9 +37,9 @@ public:
 	void createShip( const Uint32& time, Player* player );
 	void removeResident( Ship* ship );
 	
-	void render( SDL_Surface* screen ) const;
-	void renderOrbit( SDL_Surface* screen ) const;
-	void renderBuildProgress( SDL_Surface* screen ) const;
+	void render( ) const;
+	void renderOrbit( ) const;
+	void renderBuildProgress( ) const;
 	
 	void updateShipLocations();
 	
@@ -74,8 +70,8 @@ public:
 	void addPlanets( int numberOfPlanets );
 	void addMoons( int numberOfMoons );
 
-	void render( SDL_Surface* screen ) const;
-	void renderOrbits( SDL_Surface* screen ) const;
+	void render( ) const;
+	void renderOrbits( ) const;
 	
 	Planet* closestToCoordinate( const Coordinate& c );
 	Planet* closestToCoordinate( const Coordinate& c, double treshold );

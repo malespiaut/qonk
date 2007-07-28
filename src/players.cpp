@@ -2,8 +2,6 @@
 
 #include <map>
 
-#include <SDL/SDL_gfxPrimitives.h>
-
 #include "players.h"
 #include "planets.h"
 #include "universe.h"
@@ -14,15 +12,17 @@
 #include "selection.h"
 #include "messages.h"
 #include "canvas.h"
+#include "game.h"
 
 // ##### PLAYER #####
+using namespace std;
 
-Player::Player() {
+Player::Player() : team(0) {
   ships = new Ships();
   playerState = ALIVE;
 }
 
-Player::Player( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color ) {
+Player::Player( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int t ) : visible(false), team(t) {
 
   ships = new Ships();
   playerState = ALIVE;
@@ -69,8 +69,15 @@ Player::updateStats( double maximumPoints ) {
   }
 }
 
+void
+Player::render()
+{
+  if (visible)
+    ships->render(color);
+}
+
 bool
-Player::renderStats( SDL_Surface* screen, int height ) {
+Player::renderStats( int height ) {
   int counter = 4;
   for( Planets::iterator i = universe->planets->begin(); i != universe->planets->end(); i++ ) {
     if( i->getOwner() == this ) {
@@ -90,15 +97,14 @@ Player::renderStats( SDL_Surface* screen, int height ) {
 }
 
 void
-Player::renderStatsLog( SDL_Surface* screen ) {
+Player::renderStatsLog() {
   if( playerType == HUMAN )
-  for( unsigned int i = 1; i < stats.size(); i++ ) {
-    aalineRGBA( screen,
-		Settings::getScreenWidth() - stats.size() + i - 1,
-		Settings::getGameHeight() - stats[ i - 1 ], 
-		Settings::getScreenWidth() - stats.size() + i,
-		Settings::getGameHeight() - stats[ i ],
-		getRed( color ), getGreen( color ), getBlue( color ), i * 2 );
+  {
+    int size = stats.size();
+    for( int i = 1; i < size; i++ ) {
+      Canvas::drawPlayerStat(size, i, stats[i-1], stats[i], 
+                             getRed( color ), getGreen( color ), getBlue( color ));
+    }
   }
 }
 
@@ -135,115 +141,88 @@ Player::getColor() {
 
 // ##### HUMANPLAYER #####
 
-HumanPlayer::HumanPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color ) :
-Player( universe, homePlanet, numberOfShips, color ) {
-  mouseSelection = new Selection();
+HumanPlayer::HumanPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int team ) :
+Player( universe, homePlanet, numberOfShips, color, team ) {
   playerType = Player::HUMAN;
-  fleetSelection = 50;
-  MSGstart(universe);
+  fleetStrength = 50;
+}
+
+void
+HumanPlayer::selectNearestPlanet(int x, int y)
+{
+  double pointerX = ( (double)x - Settings::getGameOffsetX() ) / Settings::getGameWidth();
+  double pointerY = (double)y / Settings::getGameHeight();
+  Planet* closestPlanet = universe->planets->closestToCoordinate( Coordinate( pointerX, pointerY ), 1 );
+	  
+  if (closestPlanet && closestPlanet->getOwner() == this) {
+  for (list <Planet *>::iterator i = occupiedPlanets.begin(); i != occupiedPlanets.end(); i++)
+    (*i)->setSourceSelected(false);
+	    
+    closestPlanet->setSourceSelected(true);
+  }
+  else
+  {
+    for (list <Planet *>::iterator i = occupiedPlanets.begin(); i != occupiedPlanets.end(); i++)
+      (*i)->setSourceSelected(false);
+  }
 
 }
 
 void
-HumanPlayer::render( SDL_Surface* screen ) {
-  mouseSelection->render( screen );
-  ships->render( screen, color );
+HumanPlayer::selectPlanetAt(int x, int y)
+{
+  double pointerX = ( (double)x - Settings::getGameOffsetX() ) / Settings::getGameWidth();
+  double pointerY = (double)y / Settings::getGameHeight();
+  Planet* closestPlanet = universe->planets->closestToCoordinate( Coordinate( pointerX, pointerY ), 0.01 );
+	  
+  if (closestPlanet && closestPlanet->getOwner() == this) {
+    for (list <Planet *>::iterator i = occupiedPlanets.begin(); i != occupiedPlanets.end(); i++)
+      (*i)->setSourceSelected(false);
+	    
+    closestPlanet->setSourceSelected(true);
+  }
+  else
+  {
+    for (list <Planet *>::iterator i = occupiedPlanets.begin(); i != occupiedPlanets.end(); i++)
+      (*i)->setSourceSelected(false);
+  }
+
 }
 
 void
-HumanPlayer::update() {
+HumanPlayer::moveToNearestPlanet(int x, int y)
+{
+  double pointerX = ( (double)x - Settings::getGameOffsetX() ) / Settings::getGameWidth();
+  double pointerY = (double)y / Settings::getGameHeight();
+  Planet* closestPlanet = universe->planets->closestToCoordinate( Coordinate( pointerX, pointerY ), 1 );
+	  
+  if( closestPlanet != NULL ) {
+    for (list <Planet *>::iterator i = occupiedPlanets.begin(); i != occupiedPlanets.end(); i++) {
+      if ((*i)->isSourceSelected())
+        (*i)->moveResidentsTo(closestPlanet, fleetStrength);
+    }
+  }
+}
+
+void
+HumanPlayer::update(Game *game) {
 
   if( playerState == ALIVE ) {
     if( getPoints() == 0 ) {
-      MSGlost(universe);
       playerState = DEAD;
       return;
     }
   } else
     return;
     
-  // update mouse selection, and select ships if left mouse button is released
-  
-	if( mouseSelection->update() ) {
-	        universe->planets->sourceSelect( mouseSelection, this );
-	}
-	
-	// let ships move if the user requests this with right mouse button
-	
-	int mouseX;
-	int mouseY;
-	Uint8 mouseState = SDL_GetMouseState( &mouseX, &mouseY );
-	
-	// Selects a single planet with middle mouse button
-	if (mouseState & SDL_BUTTON(2)) {
-          double pointerX = ( (double)mouseX - Settings::getGameOffsetX() ) / Settings::getGameWidth();
-          double pointerY = (double)mouseY / Settings::getGameHeight();
-          Planet* closestPlanet = universe->planets->closestToCoordinate( Coordinate( pointerX, pointerY ), 1 );
-	  
-	  if (closestPlanet && closestPlanet->getOwner() == this) {
-	    for (list <Planet *>::iterator i = occupiedPlanets.begin(); i != occupiedPlanets.end(); i++)
-	     (*i)->setSourceSelected(false);
-	    
-	    closestPlanet->setSourceSelected(true);
-	  }
-	}
-
-        // Toggle a planet's state with middle mouse button
-	/*
-	if (mouseState & SDL_BUTTON(2)) {
-          double pointerX = ( (double)mouseX - Settings::getGameOffsetX() ) / Settings::getGameWidth();
-          double pointerY = (double)mouseY / Settings::getGameHeight();
-          Planet* closestPlanet = universe->planets->closestToCoordinate( Coordinate( pointerX, pointerY ), 1 );
-	  
-	  if (closestPlanet) {
-	    closestPlanet->setSourceSelected(!closestPlanet->isSourceSelected());
-	  }
-	}
-	*/
-	
-	if( mouseState & SDL_BUTTON( 3 ) ) {
-	if( !rightMouseButtonPushed ) {
-	  rightMouseButtonPushed = true;
-          double pointerX = ( (double)mouseX - Settings::getGameOffsetX() ) / Settings::getGameWidth();
-          double pointerY = (double)mouseY / Settings::getGameHeight();
-          Planet* closestPlanet = universe->planets->closestToCoordinate( Coordinate( pointerX, pointerY ), 1 );
-	  
-          if( closestPlanet != NULL ) {
-	    for (list <Planet *>::iterator i = occupiedPlanets.begin(); i != occupiedPlanets.end(); i++) {
-	      if ((*i)->isSourceSelected())
-	        (*i)->moveResidentsTo(closestPlanet, fleetSelection);
-	    }
-	    
-          }
-	  /*
-	   umschreiben, dass ein prozentualer Teil losgeschickt wird
-          if( closestPlanet != NULL ) {
-	    if( ships->numberSelectedShips() > 0 ) {
-              ships->moveTo( closestPlanet, universe->actionQueue );
-            } else {
-              Ship* ship = ships->getNearestResidentShip( closestPlanet );
-              if( ship != NULL ) {
-                ship->moveTo( timer.getTime(), closestPlanet, universe->actionQueue );
-              } else {
-              }
-            }
-          }
-	  */
-	}
-	} else rightMouseButtonPushed = false;
-	
-	removeDeadShips();
+  removeDeadShips();
 	
 }
 
 void
-HumanPlayer::setFleetSelection(int sel) {
-  if (fleetSelection != sel) {
-   fleetSelection = sel;
-   stringstream s;
-   s << "Setting fleet selection to " << sel << "%";
-		    
-//   universe->messages->addMessage( timer.getTime(), Message(s.str(), 20000, 0x808080));
+HumanPlayer::setFleetStrength(int str) {
+  if (fleetStrength != str) {
+   fleetStrength = str;
   }
 }
 
@@ -255,8 +234,8 @@ HumanPlayer::selectAllPlanets() {
 
 // ##### COMPUTERPLAYER #####
 
-ComputerPlayer::ComputerPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color ) :
-Player( universe, homePlanet, numberOfShips, color ) {
+ComputerPlayer::ComputerPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int team ) :
+Player( universe, homePlanet, numberOfShips, color, team ) {
   playerType = Player::COMPUTER;
   
   // give the computer player some values for determining strategic actions
@@ -270,8 +249,6 @@ Player( universe, homePlanet, numberOfShips, color ) {
   strongerEnemyPriority = 0.2 + frand( 1.6 );
   
   universe->actionQueue->scheduleAction( rand() % 10000, new ComputerPlayerAction( this ) );
-  
-  displayShips = false;
 }
 
 void 
@@ -280,16 +257,10 @@ ComputerPlayer::printStats() {
 }
 
 void
-ComputerPlayer::render( SDL_Surface* screen ) {
-  if( displayShips )
-    ships->render( screen, color );
-}
-
-void
-ComputerPlayer::update() {
+ComputerPlayer::update(Game *game) {
   if( playerState == ALIVE ) {
     if( getPoints() == 0 ) {
-      universe->messages->addMessage( timer.getTime(), Message( "AI player is dead", getRed( color ), getGreen( color ), getBlue( color ) ) );
+      game->addMessage(0, Message( "AI player is dead", color));
       playerState = DEAD;
       return;
     }
@@ -297,6 +268,8 @@ ComputerPlayer::update() {
     return;
   removeDeadShips();
 }
+
+
 
 bool
 ComputerPlayer::isAPreferredPlanet( Planet* planet ) {
@@ -422,43 +395,16 @@ ComputerPlayer::action( const Uint32& time ) {
   
 }
 
-void
-ComputerPlayer::toggleDisplayShips() {
-  displayShips = !displayShips;
-}
-
-void
-ComputerPlayer::setDisplayShips( bool b ) {
-  displayShips = b;
-}
-
 // ##### NEUTRALPLAYER #####
 
 NeutralPlayer::NeutralPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color ) :
-Player( universe, homePlanet, numberOfShips, color ) {
+Player( universe, homePlanet, numberOfShips, color, 0 ) {
   playerType = Player::NEUTRAL;
-  displayShips = false;
 }
 
 void
-NeutralPlayer::render( SDL_Surface* screen ) {
-  if( displayShips )
-    ships->render( screen, color );
-}
-
-void
-NeutralPlayer::update() {
+NeutralPlayer::update(Game *game) {
   removeDeadShips();
-}
-
-void
-NeutralPlayer::toggleDisplayShips() {
-  displayShips = !displayShips;
-}
-
-void
-NeutralPlayer::setDisplayShips( bool b ) {
-  displayShips = b;
 }
 
 // ##### PLAYERS #####
@@ -469,11 +415,11 @@ Players::Players( Universe* universe ) {
 }
 
 void
-Players::render( SDL_Surface* screen ) {
+Players::render() {
   for( iterator i = begin(); i != end(); i++ ) {
-    (*i)->render( screen );
+    (*i)->render();
   }
-  renderStats( screen );
+  renderStats();
 }
 
 double
@@ -496,14 +442,16 @@ Players::updateStats( int time ) {
 }
 
 void
-Players::renderStats( SDL_Surface* screen ) {
+Players::renderStats() {
+
 
   multimap< double, Player* > playerSorter;
   for( iterator i = begin(); i != end(); i++ ) {
     playerSorter.insert( pair< double, Player* >( (*i)->getPoints(), *i ) );
-    (*i)->renderStatsLog( screen );
+    (*i)->renderStatsLog();
   }
   
+/* TODO: Reimplement this with a scoreboard approach or something else
   Player* currentBestPlayer = playerSorter.rbegin()->second;
   double maxPoints = currentBestPlayer->getPoints();
   if( currentBestPlayer != bestPlayer ) {
@@ -513,12 +461,13 @@ Players::renderStats( SDL_Surface* screen ) {
     else if( bestPlayer->getPlayerType() == Player::HUMAN )
       universe->messages->addMessage( timer.getTime(), Message( "You take the lead", 10000, getRed( bestPlayer->getColor() ), getGreen( bestPlayer->getColor() ), getBlue( bestPlayer->getColor() ) ) );
   }
+*/
 
   int height = 0;
   for( multimap< double, Player* >::reverse_iterator i = playerSorter.rbegin(); i != playerSorter.rend(); i++ ) {
     Player* p = i->second;
     if( p->getPlayerType() != Player::NEUTRAL ) {
-      if( p->renderStats( screen, height ) )
+      if( p->renderStats(height ) )
         height += 10;
     }
   }
@@ -526,9 +475,9 @@ Players::renderStats( SDL_Surface* screen ) {
 }
 
 void
-Players::update() {
+Players::update(Game *game) {
   for( iterator i = begin(); i != end(); i++ ) {
-    (*i)->update();
+    (*i)->update(game);
   }
 }
 

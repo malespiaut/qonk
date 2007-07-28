@@ -1,0 +1,4 @@
+This folder contains guichan 0.6.1 which has been customized
+to use SDL.
+
+The source of this library is provided under the revised BSD license. 

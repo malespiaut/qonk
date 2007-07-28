@@ -2,6 +2,8 @@
 
 #include "timer.h"
 
+using namespace std;
+
 Uint32 Timer::startTime;
 Uint32 Timer::pauseTime;
 bool Timer::paused;

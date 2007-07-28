@@ -3,31 +3,59 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "timer.h"
-#include "readconf.h"
-
 #include <vector>
 #include <string>
 
+#include "lisp/lisp.hpp"
+#include "lisp/writer.hpp"
+
+#include "timer.h"
+#include "input.h"
+
 class Settings {
 private:
+  static const int REQUIRED_CONFIG_FILE_VERSION = 2;
+  static const int CURRENT_CONFIG_FILE_VERSION = 2;
+
+  static std::string fileName;
+
   static int screenWidth, screenHeight, gameWidth, gameHeight, gameOffsetX;
   static bool fullscreen;
+  static bool enemyVisibility;
 
   static int numberOfPlanets;
   static int numberOfComputerPlayers;
 
-  static Config& config;
+  static Input inputMap[GA_COUNT][2];
+
+  static void writeInput(lisp::Writer *, const char *, GameAction);
+
+  static void readInput(const lisp::Lisp *, const char *, GameAction);
+  static void setupDefaultActionMap();
+  static void set(GameAction, InputType, int, int, int);
+
+  static std::string getConfigFilePath();
+  static bool fileExists(const std::string&);
+
+  static std::string getInputAsString(Input &);
 
 public:
   static void init();
+
+  static void setEnemyVisibility(bool b) { enemyVisibility = b; }
+  static bool getEnemyVisibility() { return enemyVisibility; }
 
   static void setFullscreen( bool b ) { fullscreen = b; }
   static bool getFullscreen() { return fullscreen; }
 
   static void setResolution(int, int);
+
   static int getScreenWidth() { return screenWidth; }
+  static void setScreenWidth(int w) { screenWidth = w; }
+
   static int getScreenHeight() { return screenHeight; }
+  static void setScreenHeight(int h) { screenHeight = h; }
+
   static int getGameWidth() { return gameWidth; }
   static int getGameHeight() { return gameHeight; }
   static int getGameOffsetX() { return gameOffsetX; }
@@ -38,7 +66,17 @@ public:
   static int getNumberOfComputerPlayers() { return numberOfComputerPlayers; }
   static int setNumberOfComputerPlayers(int p) { numberOfComputerPlayers = p; }
 
+  static Input getInput(GameAction);
+  static Input getAltInput(GameAction);
+
   static void store();
+  
+  static std::string getAsString(GameAction);
+
+  static void printInput(char *);
+
+  static void set(GameAction, Input &);
+
 };
 
 #endif

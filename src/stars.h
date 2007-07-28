@@ -5,17 +5,15 @@
 
 #include <vector>
 
-#include <SDL/SDL.h>
-
 #include "coordinate.h"
 
 class Star {
 private:
-	Uint8 brightness;
+	int brightness;
 	Coordinate c;
 public:
 	Star();
-	void render( SDL_Surface* screen ) const;
+	void render( ) const;
 };
 
 class Stars : public std::vector< Star > {
@@ -25,7 +23,7 @@ public:
 	
 	void addStars( int n );
 	
-	void render( SDL_Surface* screen ) const;
+	void render( ) const;
 };
 
 #endif

@@ -61,3 +61,8 @@ Coordinate::distance( const Coordinate& c ) const {
 	return sqrt( dx * dx + dy * dy );
 }
 
+bool
+Coordinate::operator==( const Coordinate &that) const
+{
+  return x == that.x && y == that.y;
+}

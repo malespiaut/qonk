@@ -4,6 +4,8 @@
 
 #include "canvas.h"
 
+using namespace std;
+
 Font::Font( char* fileName, int size ) {
   std::string s = PKG_DATA_DIR;
   s =+ fileName;

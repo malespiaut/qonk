@@ -6,6 +6,7 @@
 #include <iostream>
 
 // ##### ACTION #####
+using namespace std;
 
 Action::Action() {
 	actionID = 0;

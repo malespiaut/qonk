@@ -2,8 +2,6 @@
 
 #include <math.h>
 
-#include <SDL/SDL.h>
-
 #include "planets.h"
 #include "timer.h"
 #include "ships.h"
@@ -14,10 +12,10 @@
 #include "selection.h"
 #include "players.h"
 #include "universe.h"
-#include "fonts.h"
 #include "messages.h"
 #include "canvas.h"
 
+using namespace std;
 
 // ##### PLANET #####
 
@@ -142,9 +140,9 @@ Planet::removeResident( Ship* ship ) {
 }
 
 void
-Planet::render( SDL_Surface* screen ) const {
+Planet::render( ) const {
 	if( owner->getPlayerType() == Player::HUMAN )
-		renderBuildProgress( screen );
+		renderBuildProgress( );
 	Coordinate location = getLocation();
 
 	Canvas::drawPlanet(location, size, owner->getColor() );
@@ -167,7 +165,7 @@ Planet::render( SDL_Surface* screen ) const {
 }
 
 void
-Planet::renderOrbit( SDL_Surface* screen ) const {
+Planet::renderOrbit( ) const {
 	Coordinate centerLocation;
 	if( isAMoon ) {
 		centerLocation = mother->getLocation();
@@ -178,15 +176,14 @@ Planet::renderOrbit( SDL_Surface* screen ) const {
 	if( owner != NULL )
 		Canvas::drawOrbit(centerLocation, rotationDistance, owner->getColor());
 	if( getMoon() ) {
-		mother->renderOrbit( screen );
+		mother->renderOrbit( );
 	}
 }
 
 void
-Planet::renderBuildProgress( SDL_Surface* screen ) const {
+Planet::renderBuildProgress( ) const {
 
 	Coordinate location = getLocation();
-	Font* font = universe->messages->getFont();
 	int x = location.getXMapped();
 	int y = location.getYMapped();
 	double percentage = 100.0 * ( timer.getTime() - buildStartTime ) / ( buildEndTime - buildStartTime );
@@ -252,7 +249,11 @@ Planet::moveResidentsTo(Planet *destination, int fleetSelection) {
     return;
   }
     
-  int decampeeCount = (fleetSelection * residentShips.size()) / 100;
+  // fleetSelection of 1 means "send one ship". Otherwise it means
+  //  "send fleetSelection percent of the available ships.".
+  int decampeeCount = (fleetSelection == 1)
+                      ? ((residentShips.size() > 0) ? 1 : 0)
+                      : (fleetSelection * residentShips.size()) / 100;
   if (!decampeeCount)
     return;
   
@@ -315,15 +316,15 @@ Planets::addMoons( int numberOfMoons ) {
 }
 
 void 
-Planets::render( SDL_Surface* screen ) const {
+Planets::render( ) const {
 	for( const_iterator i = begin(); i != end(); i++ )
-		i->render( screen );
+		i->render( );
 }
 
 void 
-Planets::renderOrbits( SDL_Surface* screen ) const {
+Planets::renderOrbits( ) const {
 	for( const_iterator i = begin(); i != end(); i++ )
-		i->renderOrbit( screen );
+		i->renderOrbit( );
 }
 
 Planet*

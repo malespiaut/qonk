@@ -5,9 +5,10 @@
 #include "settings.h"
 #include "coordinate.h"
 #include "extensions.h"
-#include "universe.h"
-#include "fonts.h"
+#include "game.h"
+#include "canvas.h"
 
+using namespace std;
 
 Message::Message( string message, Uint32 displayTime, Uint8 r, Uint8 g, Uint8 b ) {
   this->message = string( "[" ) + timer.getTimeMMSS() + "] " + message;
@@ -42,12 +43,12 @@ Message::Message( string message, Uint32 color ) {
 }
 
 void
-Message::render( SDL_Surface* screen, int &x, int &y, Font* font, int time ) {
+Message::render( int &x, int &y, int time) {
   if( time > 0 ) {
     
     // default parameters for showing a message
     
-    int dx = font->getHeight();
+    int dx = Canvas::getFontHeight();
     int alpha = 255;
     
     // fading in a message
@@ -71,21 +72,24 @@ Message::render( SDL_Surface* screen, int &x, int &y, Font* font, int time ) {
       
     } else {
     
-      font->render( screen, x, y - dx, message.c_str(), r, g, b, alpha );
+      Canvas::drawText( x, y - dx, message.c_str(), r, g, b, alpha );
       
     }
     
     y -= dx;
-  }
+  } 
+   // Begin Jacobsen
+  if ( time == -1 )
+	  Canvas::drawText( x, y , message.c_str(), r, g, b, 255 );
+    // End jacobsen
 }
 
 Uint32
 Message::getDisplayTime() {
   return displayTime;
 }
-
-Messages::Messages() {
-  font = new Font( "font.ttf", 12 );
+//Jacobsen - added init of fleetStrengthMessage
+Messages::Messages() : fleetStrengthMessage("Fleet strength 50%",0x808080) {
 }
 
 Messages::~Messages() {
@@ -104,37 +108,54 @@ Messages::cleanup() {
 }
 
 void
-Messages::render(	SDL_Surface* screen ) {
+Messages::render() {
   cleanup();
   int x = 12; 
   int y = Settings::getGameHeight() - 28;
   for( reverse_iterator i = rbegin(); i != rend(); i++ ) {
-    i->second.render( screen, x, y, font, (int)timer.getTime() - (int)i->first );
+    i->second.render(x, y, (int)timer.getTime() - (int)i->first );
   }
+  
+  //Begin Jacobsen
+  x = Settings::getGameWidth() - 80; 
+  y = Settings::getGameHeight() - 28;
+  fleetStrengthMessage.render(x,y,-1);
+  //End Jacobsen
 }
+
+//Begin Jacobsen
+void Messages::setFleetStrengthMessage( Message m ) {
+	fleetStrengthMessage = m;
+}
+//End Jacobsen
 
 void
-MSGwon(Universe* universe, int nextPlanets, int nextComputerPlayers){
-	universe->messages->addMessage( timer.getTime() + 200, Message( "You have QONKuered the solar system! You won!", 20000, 0xffffff ) );
+MSGwon(Game *game, int nextPlanets, int nextComputerPlayers){
+	game->addMessage( 200, Message( "You have QONKuered the solar system! You won!", 20000, 0xffffff ) );
 	stringstream s;
 	s << "Try again, with " << nextPlanets << " planets and " << nextComputerPlayers << " AI players!";
-	universe->messages->addMessage( timer.getTime() + 400, Message( s.str(), 20000, 0x808080 ) );
-	universe->messages->addMessage( timer.getTime() + 600, Message( "Press [N] ...", 40000, 0x808080 ) );
+	game->addMessage( 400, Message( s.str(), 20000, 0x808080 ) );
+
+  s.str("");
+  s << "Use [" << Settings::getAsString(GA_NEXT_ROUND);
+  s << "] to start the next round";
+
+	game->addMessage( 600, Message( s.str(), 40000, 0x808080 ) );
 }
 
 void 
-MSGlost(Universe* universe) {
-	universe->messages->addMessage( timer.getTime(), Message( "GAME OVER!!! You lost all your planets and ships, you are dead!", 20000, 0xffffff ) );
-	universe->messages->addMessage( timer.getTime() + 200, Message( "Press [R] ...", 40000, 0x808080 ) );
+MSGlost(Game *game) {
+	game->addMessage(0, Message( "GAME OVER!!! You lost all your planets and ships, you are dead!", 20000, 0xffffff ) );
+	game->addMessage(200, Message( "Press [R] ...", 40000, 0x808080 ) );
 }
 
 void 
-MSGstart(Universe* universe) {
-  	universe->messages->addMessage( timer.getTime() + 000, Message( "Let's QONK! Kick the AI players out!", 15000, 0xffffff ) );
-  	universe->messages->addMessage( timer.getTime() + 200, Message( "[Left click and drag] for multi select, [Middle click] for single select.", 10000, 0x808080 ) );
-  	universe->messages->addMessage( timer.getTime() + 400, Message( "[Right click] to send ships.", 10000, 0x808080 ) );
-  	universe->messages->addMessage( timer.getTime() + 600, Message( "[P]ause,[A]ll planets,[R]estart.", 10000, 0x808080 ) );
-  	universe->messages->addMessage( timer.getTime() + 700, Message( "[Escape] to quit", 10000, 0x808080 ) );
-  	universe->messages->addMessage( timer.getTime() + 800, Message( "[1]-[0] fleet selection (10%-100%)", 10000, 0x808080 ) );
-  	universe->messages->addMessage( timer.getTime() + 1000, Message( "Initial fleet selection is 50%", 10000, 0x808080 ) );
+MSGstart(Game *game) {
+  	game->addMessage( 000, Message( "Let's QONK! Kick the AI players out!", 15000, 0xffffff ) );
+  	game->addMessage( 200, Message( "[Left click and drag] for multi select, [Middle click] for single select.", 10000, 0x808080 ) );
+  	game->addMessage( 400, Message( "[Right click] to send ships.", 10000, 0x808080 ) );
+  	game->addMessage( 600, Message( "[P]ause,[A]ll planets,[R]estart.", 10000, 0x808080 ) );
+  	game->addMessage( 700, Message( "[Escape] to quit", 10000, 0x808080 ) );
+  	game->addMessage( 800, Message( "[1]-[0] fleet selection (10%-100%)", 10000, 0x808080 ) );
+  	game->addMessage(1000, Message( "Initial fleet selection is 50%", 10000, 0x808080 ) );
 }

@@ -3,8 +3,6 @@
 #ifndef ANIMATIONS_H
 #define ANIMATIONS_H
 
-#include <SDL/SDL.h>
-
 #include "actions.h"
 
 class Planet;
@@ -12,12 +10,12 @@ class Planet;
 class Animation : public Action {
 public:
   void execute( const Uint32& time ) {}
-  virtual void render( SDL_Surface* screen ) = 0;
+  virtual void render( ) = 0;
 };
 
 class AnimationQueue : public ActionQueue {
 public:
-  void render( SDL_Surface* screen );
+  void render( );
 };
 
 class SonarAnimation : public Animation {
@@ -30,7 +28,7 @@ private:
 public:
   SonarAnimation();
   SonarAnimation( Planet* planet, const Uint32& color, const int& size, const Uint32& startTime, const Uint32& endTime, bool circle = false );
-  void render( SDL_Surface* screen );
+  void render( );
 };
 
 #endif

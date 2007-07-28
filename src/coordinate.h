@@ -21,7 +21,8 @@ public:
 	int getYMapped() const;
 	
 	double distance( const Coordinate& c ) const;
-	
+
+	bool operator==( const Coordinate &that) const;
 };
 
 #endif

@@ -1,302 +1,284 @@
 // Copyright 2005 by Anthony Liekens anthony@liekens.net
-#include <SDL/SDL_gfxPrimitives.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
 
-#include "coordinate.h"
-#include "stars.h"
-#include "planets.h"
-#include "selection.h"
-#include "players.h"
-#include "universe.h"
-#include "fonts.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#else
+#define VERSION no-version
+#endif
+
+#include <sstream>
+#include <string>
+
+#include "sdl_driver.h"
 #include "settings.h"
-#include "extensions.h"
-#include "messages.h"
+
 #include "canvas.h"
 
-#include <math.h>
+#include "game.h"
+#include "main.h"
 
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <vector>
-#include <string>
-#include <list>
+#include "menumanager.h"
+#include "videooptions.h"
+#include "gameoptions.h"
 
-Font* font;
-Uint32 FPStimer, FPScounter;
-double FPS;
 
-enum States { PLAYING, LOST, WON };
-States state;
+using namespace std;
 
-void render( SDL_Surface* screen, Universe* universe, Players* players ) {
-	boxRGBA( screen, 0, 0, Settings::getScreenWidth(), Settings::getScreenHeight(), 0, 0, 0, 255 );
-	
-	universe->renderBackground( screen );
-	players->render( screen );
-	universe->renderForeground( screen );
+Main::Main()
+  : game(0), running(true), lastTicks(0), fpsCounter(0), fps(0)
+{
+  driver = new SDLDriver(*this);
+  menuManager = new MenuManager(*this);
+}
 
+Main::~Main()
+{
+  delete menuManager;
+  delete driver;
+}
+
+void
+Main::startSinglePlayerGame(int planets, int players)
+{
+  GameOptions &gameOptions = menuManager->getGameOptions();
+
+  if( planets <= 1 )
+  {
+    cerr << "Resetting to least of 2 planets" << endl;
+    planets = 2;
+  }
+
+  if( players > planets - 1 )
+  {
+    cerr << "Resetting computer players to maximum of " << planets - 1 << endl;
+    players = planets - 1;
+  }
+
+  if( players < 1 )
+  {
+    cerr << "Resetting computer players to at least 1" << endl;
+    players = 1;
+  }
+
+  gameOptions.setPlanets(planets);
+  gameOptions.setPlayers(players);
+
+  startSinglePlayerGame(gameOptions);
+}
+
+void
+Main::startSinglePlayerGame(GameOptions &gameOptions)
+{
+  if (game)
+  {
+    delete game;
+    game = 0;
+  }
+
+  menuManager->hide();
+
+  game = new Game(gameOptions);
+  game->setPaused(false);
+}
+
+void
+Main::quit()
+{
+  running = false;
+}
+
+void
+Main::showMenu()
+{
+  if (menuManager->isVisible())
+    return;
+
+  menuManager->show();
+
+  // Just in case there is a game, pause it.
+  if (game)
+    game->setPaused(true);
+
+}
+
+void
+Main::applyVideoOptions(VideoOptions &videoOptions)
+{
+      // Causes the game to pause which is nice when the CRT/TFT is resyncing.
+      showMenu();
+
+      Settings::setFullscreen(videoOptions.getFullscreen());
+      Settings::setScreenWidth(videoOptions.getScreenWidth());
+      Settings::setScreenHeight(videoOptions.getScreenHeight());
+
+      Canvas::initScreen();
+
+      menuManager->resize();
+}
+
+void
+Main::handle(GameAction gameAction, int value)
+{
+  switch (gameAction)
+  {
+    case GA_SENSE_CANCEL:
+      if (!value)
+        menuManager->senseFinished(false);
+      break;
+    case GA_SENSE_COMPLETE:
+      if (!value)
+        menuManager->senseFinished(true);
+      break;
+    case GA_TOGGLE_FULLSCREEN:
+      if (value) return;
+      {
+        VideoOptions &vo = menuManager->getVideoOptions();
+        vo.toggleFullscreen();
+        applyVideoOptions(vo);
+      }
+      break;
+    case GA_LEAVE:
+      // It is important to act on keyrelease since this is the same
+      // for what guichan reacts. By doing so it is predictable that
+      // after handling GA_LEAVE (which may make the menusystem visible)
+      // guichan's logic is called.
+      if (value)
+        return;
+
+      // Main does not care about making the menu system invisible. This is done
+      // from inside the menu system.
+      if (!menuManager->isVisible())
+        menuManager->show();
+
+      break;
+    case GA_SCREENSHOT:
+      if (value)
+        return;
+
+      SDL_SaveBMP( SDL_GetVideoSurface(), "screenshot.bmp" );
+      break;
+    default:
+      // Let the game instance handle the rest
+      if (game)
+        game->handle(gameAction, value);
+      break;
+  }
+}
+
+void
+Main::renderFPS()
+{
 	stringstream s;
 	s << timer.getTimeMMSSHH();
 	
-	FPScounter++;
-	if( SDL_GetTicks() - FPStimer >= 1000 ) {
-		if( FPS == 0 )
-			FPS = ( FPS + 1000.0 * FPScounter / ( SDL_GetTicks() - FPStimer ) ) / 2;
-		else
-			FPS = 1000.0 * FPScounter / ( SDL_GetTicks() - FPStimer );
-		FPStimer = SDL_GetTicks();
-		FPScounter = 0;
-	}
-	s << " (" << setiosflags(ios::fixed) << setprecision(2) << FPS << "FPS)";
-	font->render( screen, 13, Settings::getGameHeight() - 30, s.str().c_str(), 0x80, 0x80, 0x80 );
+	fpsCounter++;
 
-	SDL_UpdateRect(screen, 0, 0, Settings::getScreenWidth(), Settings::getScreenHeight() );
+	s << " (" << fps << " FPS)";
+	Canvas::drawText( 13, Settings::getGameHeight() - 30, s.str().c_str(), 0x80, 0x80, 0x80 );
+
+	if( SDL_GetTicks() - lastTicks >= 1000 ) {
+		lastTicks = SDL_GetTicks();
+    fps = fpsCounter;
+		fpsCounter = 0;
+	}
   
 }
 
-int main(int argc, char** argv) {
-	bool FirstRun = true;
+void
+Main::run()
+{
+  bool b;
 
-	int numberOfPlanets;
-	int numberOfComputerPlayers;
+  // Main loop: loop forever.
+	while (running) {
+
+    Canvas::drawBox(0, 0, Settings::getScreenWidth(), Settings::getScreenHeight(), 0, 0, 0);
+
+    if (game)
+    {
+      game->render();
+    }
+
+    menuManager->render();
+    renderFPS();
+    Canvas::updateScreen();
+		
+    b = menuManager->update();
+
+    if (game)
+    {
+      if (!game->run(b))
+      {
+        delete game;
+        game = 0;
+        menuManager->showSinglePlayerMenu();
+      }
+    }
+
+		// Poll for events, and handle the ones we care about.
+    driver->loop();
+	}
+
+}
+
+int main(int argc, char** argv) {
+	int numberOfPlanets = -1;
+	int numberOfComputerPlayers = -1;
+
+  cout << "This is " << PACKAGE_STRING << endl;
+  cout << "(c) 2003 Anthony Liekens" << endl;
+  cout << "(c) 2007 Qonk development team" << endl;
+  cout << "This game is free software released under the GNU General Public License, " << endl;
+  cout << "either version 2 of the license or, at your option, any later version. " << endl;
 
 	Settings::init();
-	
-	bool NextRound = true;
-	while (NextRound){
-	state = PLAYING;
-	
-	if (FirstRun){
-	FirstRun=false;
+
 	switch (argc) {
 		case 3:
 			numberOfPlanets = atoi( argv[ 1 ] );
 			numberOfComputerPlayers = atoi( argv[ 2 ] );
 			break;
-		case 1:
-			numberOfPlanets = Settings::getNumberOfPlanets();
-			numberOfComputerPlayers = Settings::getNumberOfComputerPlayers();
-			break;
+    case 1:
+      // Do nothing.
+      break;
 		default:
 			cerr << "Usage: " << argv[ 0 ] << " numberOfPlanets numberOfComputerPlayers" << endl;
 			exit(1);
 			break;
 	}
 
-	if( numberOfPlanets <= 1 ) {
-		cerr << "Resetting to least of 2 planets" << endl;
-		numberOfPlanets = 2;
-	}
-	if( numberOfComputerPlayers > numberOfPlanets - 1 ) {
-		cerr << "Resetting computer players to maximum of " << numberOfPlanets - 1 << endl;
-		numberOfComputerPlayers = numberOfPlanets - 1;
-	}
-	if( numberOfComputerPlayers <= 1 ) {
-		cerr << "Resetting computer players to at least 1" << endl;
-		numberOfComputerPlayers = 1;
-	}
-	}
-	// determine next level when this was passed successfully
-	
-	int nextPlanets = numberOfPlanets + 1;
-	int nextComputerPlayers = numberOfComputerPlayers + 1;
-	if( nextPlanets == 11 ) {
-		int d = nextPlanets - nextComputerPlayers;
-		if( d != 1 ) {
-			nextPlanets = 10;
-		}
-	}
+  Main *main = new Main();
 
-	/* Init SDL */
-	if( SDL_Init( SDL_INIT_TIMER | SDL_INIT_VIDEO ) < 0 ) {
-		cerr << "Couldn't initialize SDL: " << SDL_GetError() << endl;
-		exit( 1 );
-	}
-	timer.start();
-	atexit( SDL_Quit );
-	if ( TTF_Init() < 0 ) {
-		cerr << "Couldn't initialize TTF: " << SDL_GetError() << endl;
-		exit( 1 );
-	}
-	atexit( TTF_Quit );
-	font = new Font( "font.ttf", 18 );
-	
-	srand( time( NULL) );
-	
-	/* Set window title */
-	SDL_WM_SetCaption( "Qonk", "Qonk" );
+  if (numberOfPlanets == -1
+      && numberOfComputerPlayers == -1)
+    main->showMenu();
+  else
+    main->startSinglePlayerGame(numberOfPlanets, numberOfComputerPlayers);
 
-	/* Initialize the display */
-	SDL_Surface *screen = Canvas::initScreen();
-	
-	Universe* universe = new Universe( numberOfPlanets );
-	
-	Players* players = new Players( universe );
-	universe->actionQueue->scheduleAction( 1000, new UpdatePlayersStatsAction( players ) );
+  main->run();
+  
+  delete main;
 
-	Planets::iterator planetIterator = universe->planets->begin();
-	HumanPlayer* humanPlayer = new HumanPlayer( universe, &(*planetIterator), 3, 0xffffff );
-	players->push_back( humanPlayer );
-	planetIterator++;
-	
-	int hueCounter = rand() % 360;
-	int counter = 0;
-	do {
-		if( counter < numberOfComputerPlayers ) {
-			players->push_back( new ComputerPlayer( universe, &(*planetIterator), 3, HSVtoRGB( hueCounter, 0.9, 0.9 ) ) );
-			counter++;
-			hueCounter = ( hueCounter + 360 / numberOfComputerPlayers ) % 360;
-		} else
-			if( !(&(*planetIterator))->getMoon() )
-				players->push_back( new NeutralPlayer( universe, &(*planetIterator), 1 + rand() % 3, 0x606060 ) );
-			else
-				players->push_back( new NeutralPlayer( universe, &(*planetIterator), 1 + rand() % 2, 0x606060 ) );
-		planetIterator++;
-	} while( planetIterator != universe->planets->end() );
-	
+  Settings::store();
 
-	Selection selection;
-	
-	int iteration = 0;
-
-	bool showEnemyShips = false;
-	
-	bool quit = false;
-
-	// Main loop: loop forever.
-	while( !quit ) {
-	
-		render( screen, universe, players );
-		
-		if( !timer.isPaused() ) {
-
-			// update the universe
-		
-			universe->update();
-
-			// let players update their states
-		
-			players->update();
-			
-		}
-		
-		// Poll for events, and handle the ones we care about.
-		SDL_Event event;
-		while (SDL_PollEvent(&event)) {
-		
-			switch (event.type) {
-			
-				case SDL_KEYDOWN:
-				break;
-				case SDL_KEYUP:
-					if( event.key.keysym.sym == SDLK_p ) {
-						timer.pause();
-					}
-//					if( event.key.keysym.sym == SDLK_t )
-//						showEnemyShips = !showEnemyShips;
-					// If escape is pressed, return (and thus, quit)
-					if(event.key.keysym.sym == SDLK_ESCAPE){
-						quit = true;
-						NextRound = false;
-					}
-					if(event.key.keysym.sym == SDLK_n)
- 						if (state==WON)
- 							quit = true;
- 						
- 					if(event.key.keysym.sym == SDLK_r){
- 						quit = true;
- 						nextPlanets=numberOfPlanets;
-						nextComputerPlayers = numberOfComputerPlayers;
- 					}
- 					if(event.key.keysym.sym == SDLK_f){
-						Settings::setFullscreen(!Settings::getFullscreen());
- 						screen = Canvas::initScreen();
- 					}
-				break;
-				case SDL_QUIT:
-					quit = true;
-					NextRound = false;
-				
-			}
-			
-		}
-		
-		if( humanPlayer->getPoints() == 0 ) {
-			showEnemyShips = true;
-			state = LOST;
-		}
-		
-		if( state == PLAYING ) {
-			bool allPlayersDead = true;
-			for( Players::iterator i = players->begin(); i != players->end(); i++ ) {
-				if( (*i)->getPlayerType() == Player::COMPUTER )
-					if( ((ComputerPlayer*)(*i))->getPoints() > 0 )
-						allPlayersDead = false;
-			}
-			if( allPlayersDead == true ) {
-				MSGwon(universe, nextPlanets, nextComputerPlayers);
-				state = WON;
-			}
-		}
-		
-		Uint8 *keystate = SDL_GetKeyState(NULL);
-		bool show = false;
-		if( keystate[SDLK_e] ) {
-			show = true;
-		}
-		if( keystate[SDLK_a] ) {
-			humanPlayer->selectAllPlanets();
-		}
-		if( keystate[SDLK_s] ) {
-			SDL_SaveBMP( SDL_GetVideoSurface(), "screenshot.bmp" );
-		}
-		for ( int i=SDLK_0; i<=SDLK_9; i++ ) {
-		  if (keystate[i]) {
-		    int sel = (i == SDLK_0)
-		              ? 100
-			      : (i-SDLK_0) * 10;
-		    humanPlayer->setFleetSelection(sel);
-		  }
-		}
-		
-		for( Players::iterator i = players->begin(); i != players->end(); i++ ) {
-			if( (*i)->getPlayerType() == Player::COMPUTER )
-				((ComputerPlayer*)(*i))->setDisplayShips( show || showEnemyShips );
-			if( (*i)->getPlayerType() == Player::NEUTRAL )
-				((NeutralPlayer*)(*i))->setDisplayShips( show || showEnemyShips );
-		}
-		
-		// Keep shut for some time, not to use too much CPU
-		
-		// SDL_Delay( 20 );
-		
-	}
-
-	cout << "Saving progress and settings." << endl;
-	Settings::store();
-	
-	delete font;
-	delete universe;
-	delete players;
-	
-	/*  // We dont want to much output to cout
-	if( state == LOST ) {
-		cout << "The AI players have kicked you out? Bastards!" << endl;
-		cout << "Try harder, run QONK again, with \n\n\t" << argv[ 0 ] << " " << numberOfPlanets << " " << numberOfComputerPlayers << "\n" << endl;	
-	} else if ( state == PLAYING ) {
-		cout << "You gave up early?!" << endl;
-		cout << "Try again, run QONK again, with \n\n\t" << argv[ 0 ] << " " << numberOfPlanets << " " << numberOfComputerPlayers << "\n" << endl; 
-	} else {
-		cout << "You have QONKuered the solar system! You won!" << endl;
-		cout << "Move on to the next level, and run QONK again with \n\n\t" << argv[ 0 ] << " " << nextPlanets << " " << nextComputerPlayers << "\n" << endl;
-	}*/
-	
-	numberOfPlanets = nextPlanets; 
- 	numberOfComputerPlayers = nextComputerPlayers;
-	}
-	return 0;
-	
+  return 0;
 }
+
+void
+Main::startSensing()
+{
+  driver->setSenseMode(true);
+}
+
+void
+Main::finishSensing(GameAction ga, bool completed)
+{
+  if (completed)
+  {
+    Settings::set(ga, driver->getSensedInput());
+    driver->initActionMap();
+  }
+
+  driver->setSenseMode(false);
+}
+

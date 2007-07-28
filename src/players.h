@@ -5,7 +5,6 @@
 
 #include <vector>
 #include <list>
-using namespace std;
 
 #include "actions.h"
 
@@ -13,6 +12,7 @@ class Ships;
 class Universe;
 class Planet;
 class Selection;
+class Game;
 
 class Player {
 public:
@@ -24,23 +24,27 @@ protected:
   PlayerTypes playerType;
   PlayerStates playerState;
   Uint32 color;
-  vector< int > stats;
-  list< Planet * > occupiedPlanets;
+  std::vector< int > stats;
+  std::list< Planet * > occupiedPlanets;
+  bool visible;
+  int team;
   
 public:
   Player();
-  Player( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color );
+  Player( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int t );
   virtual ~Player() {}
   
   void addShips( Planet* planet, int numberOfShips );
   void createShip( Uint32& time, Planet* planet );
   void removeDeadShips();
   
-  virtual void render( SDL_Surface* screen ) = 0;
+  void render();
+
+  void setVisible(bool vis) { visible = vis; };
   void updateStats( double maximumPoints );
-  bool renderStats( SDL_Surface* screen, int height );
-  void renderStatsLog( SDL_Surface* screen );
-  virtual void update() = 0;
+  bool renderStats( int height );
+  void renderStatsLog( );
+  virtual void update(Game *game) = 0;
   
   PlayerTypes getPlayerType();
   
@@ -51,23 +55,30 @@ public:
   
   void addPlanet(Planet *);
   void removePlanet(Planet *);
+
+  int getTeam() const { return team; }
+
 };
 
 class HumanPlayer : public Player {
 private:
-  Selection* mouseSelection;
-  bool rightMouseButtonPushed;
-  int fleetSelection;
+  int fleetStrength;
 public:
-  HumanPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color );
+  HumanPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int team );
   
-  void render( SDL_Surface* screen );
-  
-  void update();
+  void update(Game *game);
   
   void selectAllPlanets();
 
-  void setFleetSelection(int sel);
+  void setFleetStrength(int);
+
+  int getFleetStrength() const { return fleetStrength; }
+
+  void selectPlanetAt(int, int);
+
+  void selectNearestPlanet(int, int);
+
+  void moveToNearestPlanet(int, int);
 };
 
 class ComputerPlayer : public Player {
@@ -77,53 +88,41 @@ private:
   double proportionResidents; // proportion of all ships to reside on planets
   double moonPriority, enemyPriority, preferredPriority, neutralPriority, weakerEnemyPriority, strongerEnemyPriority; 
   
-  bool displayShips;
-  
-  list< Planet* > preferredPlanets;
+  std::list< Planet* > preferredPlanets;
 
 public:
-  ComputerPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color );
+  ComputerPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color, int team );
   
-  void render( SDL_Surface* screen );
-
-  void update();
+  void update(Game *);
   
   void action( const Uint32& time );
   
-  void toggleDisplayShips();
-  void setDisplayShips( bool );
   bool isAPreferredPlanet( Planet* );
   Planet* getRandomNearbyPlanet( Planet* );
   void printStats();
 };
 
 class NeutralPlayer : public Player {
-private:
-  bool displayShips;
 public:
-  NeutralPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color );
+  NeutralPlayer( Universe* universe, Planet* homePlanet, int numberOfShips, Uint32 color);
   
-  void render( SDL_Surface* screen );
-
-  void update();
+  void update(Game *);
   
-  void toggleDisplayShips();
-  void setDisplayShips( bool );
 };
 
-class Players : public list< Player* > {
+class Players : public std::list< Player* > {
 protected:
   Universe* universe;
   Player* bestPlayer;
 public:
   Players( Universe* universe );
 
-  void render( SDL_Surface* screen );
+  void render( );
   double getSumOfScores();
   void updateStats( int time );
-  void renderStats( SDL_Surface* screen );
+  void renderStats( );
   
-  void update();
+  void update(Game *);
 };
 
 class ComputerPlayerAction : public Action {

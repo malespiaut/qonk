@@ -1,46 +1,46 @@
 // Copyright 2005 by Anthony Liekens anthony@liekens.net
-#include <iostream>
-
-#include <SDL/SDL_gfxPrimitives.h>
-
 #include "coordinate.h"
 #include "selection.h"
+#include "canvas.h"
 
-Selection::Selection() {
+Selection::Selection()
+{
 	state = NOT_SELECTING;
 }
 
-bool
-Selection::update() {
-	int mouseX, mouseY;
-	Uint8 mouseState = SDL_GetMouseState( &mouseX, &mouseY );
-	
-	if( state == SELECTING ) {
-		if( !( mouseState & SDL_BUTTON(1) ) ) {
-			state = NOT_SELECTING;
-			return true;
-		} else {
-			c2.setXMapped( mouseX );
-			c2.setYMapped( mouseY );
-		}
-	} else {
-		if( mouseState & SDL_BUTTON(1) ) {
-			state = SELECTING;
-			c1.setXMapped( mouseX );
-			c1.setYMapped( mouseY );
-			c2.setXMapped( mouseX );
-			c2.setYMapped( mouseY );
-		}
-	}
-	
-	return false;
-	
+void
+Selection::start(int x, int y)
+{
+  state = SELECTING;
+
+  c1.setXMapped(x);
+  c1.setYMapped(y);
+  
+  c2.setXMapped(x);
+  c2.setYMapped(y);
+}
+
+void
+Selection::update(int x, int y)
+{
+  // Updates lower bound if currently selecting
+  if (state == SELECTING)
+  {
+    c2.setXMapped(x);
+    c2.setYMapped(y);
+  }
+}
+
+void
+Selection::end()
+{
+  state = NOT_SELECTING;
 }
 
 void 
-Selection::render( SDL_Surface *screen ) {
+Selection::render() {
 	if( state == SELECTING ) {
-		rectangleColor( screen, c1.getXMapped(), c1.getYMapped(), c2.getXMapped(), c2.getYMapped(), 0xfee19080 );
+                Canvas::drawMouseSelection(c1, c2);
 	}
 }
 
@@ -63,3 +63,16 @@ double
 Selection::getMaxY() const { 
   return ( c1.getY() > c2.getY() ? c1.getY() : c2.getY() ); 
 }
+
+bool
+Selection::isEmpty() const
+{
+  return c1 == c2;
+}
+
+bool
+Selection::isSelecting() const
+{
+  return state == SELECTING;
+}
+

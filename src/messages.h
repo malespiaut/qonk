@@ -8,38 +8,41 @@
 
 #include <SDL/SDL.h>
 
-using namespace std;
-
 class Universe;
-class Font;
+class Game;
 
 class Message {
 private:
   Uint8 r, g, b;
   Uint32 displayTime;
-  string message;
+  std::string message;
 public:
-  Message( string message, Uint32 displayTime, Uint8 r, Uint8 g, Uint8 b );
-  Message( string message, Uint32 displayTime, Uint32 color );
-  Message( string message, Uint8 r, Uint8 g, Uint8 b );
-  Message( string message, Uint32 color );
-  void render( SDL_Surface* screen, int &x, int &y, Font* f, int time );
+  Message( std::string message, Uint32 displayTime, Uint8 r, Uint8 g, Uint8 b );
+  Message( std::string message, Uint32 displayTime, Uint32 color );
+  Message( std::string message, Uint8 r, Uint8 g, Uint8 b );
+  Message( std::string message, Uint32 color );
+  void render(int &x, int &y, int time );
   Uint32 getDisplayTime();
 };
 
-class Messages : multimap< Uint32, Message > {
+class Messages : std::multimap< Uint32, Message > {
+//Begin Jacobsen
 private:
-  Font* font;
+	Message fleetStrengthMessage;
+//End Jacobsen
 public:
   Messages();
   ~Messages();
   void addMessage( Uint32 time, Message m );
   void cleanup();
-  void render( SDL_Surface* screen );
-  Font* getFont() { return font; }
+  void render();
+  
+  //Begin Jacobsen
+  void setFleetStrengthMessage( Message m );
+  //End Jacobsen
 };
 
-void MSGwon(Universe*, int, int);
-void MSGlost(Universe*);
-void MSGstart(Universe*);
+void MSGwon(Game *, int, int);
+void MSGlost(Game *);
+void MSGstart(Game *);
 #endif

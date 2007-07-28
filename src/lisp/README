@@ -1,0 +1,7 @@
+
+The source files in this directory have been taken from SuperTuxKart.
+
+They provide a parser and writer for lisp-style configuration files which is compiled
+into a (static) library for Qonk.
+
+2007-06-17 - Robert Schuster

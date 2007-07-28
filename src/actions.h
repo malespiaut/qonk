@@ -5,7 +5,6 @@
 
 #include <SDL/SDL.h>
 #include <map>
-using namespace std;
 
 class ActionQueue;
 
@@ -23,7 +22,7 @@ public:
   int getActionID() { return actionID; }
 };
 
-class ActionQueue : public multimap< Uint32, Action* > {
+class ActionQueue : public std::multimap< Uint32, Action* > {
 private:
   Uint32 time;
 public:
