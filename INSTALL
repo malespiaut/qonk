@@ -1,3 +1,6 @@
+General compilation:
+-----------------
+
 Qonk uses GNU Autoconf to manage the compilation. Call
 
         ./configure --help
@@ -7,3 +10,20 @@ to see available options.
 Like all good applications Qonk is able to be run without installation. It tries
 to find its data files in ./data first and uses $(pkgdatadir)/data in a second
 attempt.
+
+Dependencies:
+-------------
+Qonk tries to only use components available in free software operating systems.
+
+Install the development version of the following packages in order to compile
+from source:
+
+        SDL (>= 1.2)
+        SDL_ttf (>= 2.0)
+        SDL_gfx (>= 1.2)
+        SDL_image (>= 1.2)
+
+Qonk includes a modified version of guichan 0.6.1 in its sources and statically
+links that into the executable. The build system was not tested to use a
+system-wide installation of guichan 0.6.1. Furthermore since guichan is not
+extensively used in Qonk it is planned to remove it in further releases.

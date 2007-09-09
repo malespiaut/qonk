@@ -11,4 +11,7 @@ Animated sun
 
 Add network multiplayer
 
-Add menu system
+Add single-machine multiplayer
+
+Replace guichan. It is not used that much.
+
