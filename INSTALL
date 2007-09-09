@@ -1,5 +1,5 @@
-General compilation:
------------------
+General compilation notes
+-------------------------
 
 Qonk uses GNU Autoconf to manage the compilation. Call
 
@@ -11,8 +11,9 @@ Like all good applications Qonk is able to be run without installation. It tries
 to find its data files in ./data first and uses $(pkgdatadir)/data in a second
 attempt.
 
-Dependencies:
--------------
+Dependencies
+------------
+
 Qonk tries to only use components available in free software operating systems.
 
 Install the development version of the following packages in order to compile
@@ -27,3 +28,20 @@ Qonk includes a modified version of guichan 0.6.1 in its sources and statically
 links that into the executable. The build system was not tested to use a
 system-wide installation of guichan 0.6.1. Furthermore since guichan is not
 extensively used in Qonk it is planned to remove it in further releases.
+
+Compilation
+-----------
+
+In a published tarball you only need to execute
+
+  ./configure
+  make
+  make install
+
+(To avoid system-wide installation use the --prefix argument for ./configure !)
+
+You get helpful error messages if something is not correct with the
+dependencies.
+
+If you want to built the sources from SVN you need to issue ./autogen.sh and
+have the autotools installed (GNU Automake, GNU Autoconf, GNU libtool).

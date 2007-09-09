@@ -15,23 +15,11 @@ be kicked out of bigger solar systems.
 
 The game is currently very much in beta.
 
-Dependencies
-------------
-To compile the program you will need to install SDL, SDL_ttf and SDL_gfx. It is
-built using GNU Autoconf. In a published tarball you only need to execute
-
-  ./configure
-  make
-  make install
-
-You get helpful error messages if something is not correct with the
-dependencies.
-
-If you want to built the sources from SVN you need to issue ./autogen.sh and
-have the autotools installed (GNU Automake, GNU Autoconf, GNU libtool).
+For information on how to compile the source code refer to the INSTALL file.
 
 How to play
--------------
+-----------
+
 The goal is wipe out all enemies from the solar system. 
 
 Select a group of planets to put their ships into your selection for the next
