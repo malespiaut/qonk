@@ -2,7 +2,7 @@
 Features:
  - new project page: http//qonk.sf.net
  - public SVN repository: https://qonk.svn.sf.net/svnroot/qonk
- - freely chosable input (mouse, keyboard, gamepad, ...)
+ - freely choosable input (mouse, keyboard, gamepad, ...)
  - config file
  - advance to next level without leaving game
  - upgraded ship and universe painting
@@ -10,7 +10,7 @@ Features:
  - autotools build system
  - single ship mode
 Bugs fixed:
- - do not call SDL functions in Timere before SDL_Init because of static
+ - do not call SDL functions in Timer before SDL_Init because of static
    initialization
  - properly update screen size changes
  - allow removing input mappings
