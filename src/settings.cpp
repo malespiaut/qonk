@@ -326,15 +326,65 @@ Settings::readInput(const lisp::Lisp* r,
 void
 Settings::unset(GameAction ga)
 {
-  // Deletion is implemented by shift the value to the left
-  // and creating an empty entry in the 2nd location.
-  inputMap[ga][0] = inputMap[ga][1];
-  inputMap[ga][1].inputType = IT_NONE;
+  // Deletes the 2nd entry if it exists or
+  // the first if not.
+  if (inputMap[ga][1].inputType != IT_NONE)
+    inputMap[ga][1].inputType = IT_NONE;
+  else
+    inputMap[ga][0].inputType = IT_NONE;
+}
+
+void
+Settings::unsetDuplicates (GameAction ga, InputType it, int id0, int id1, int id2)
+{
+  for (int cga = GA_FIRST; cga < GA_COUNT; cga++)
+  {
+    if (cga != ga)
+    {
+      // If the input occurs in any other mapping
+      // delete it properly from there.
+      
+      if (inputMap[cga][1].inputType == it
+          && inputMap[cga][1].id0 == id0
+          && inputMap[cga][1].id1 == id1
+          && inputMap[cga][1].id2 == id2)
+      {
+        // Deletes it from the 2nd entry.
+        inputMap[cga][1].inputType = IT_NONE;
+      }
+
+      if (inputMap[cga][0].inputType == it
+          && inputMap[cga][0].id0 == id0
+          && inputMap[cga][0].id1 == id1
+          && inputMap[cga][0].id2 == id2)
+      {
+        // Deletes it from the 1st entry and
+        // shifts the 2nd to the first.
+        inputMap[cga][0] = inputMap[cga][1];
+        inputMap[cga][1].inputType = IT_NONE;
+      }
+    }
+  }
 }
 
 void
 Settings::set(GameAction ga, InputType it, int id0, int id1, int id2)
 {
+  // Do not change anything if the sensed input already
+  // exists for the game action. 
+  if (inputMap[ga][0].inputType == it
+          && inputMap[ga][0].id0 == id0
+          && inputMap[ga][0].id1 == id1
+          && inputMap[ga][0].id2 == id2
+          || inputMap[ga][1].inputType == it
+          && inputMap[ga][1].id0 == id0
+          && inputMap[ga][1].id1 == id1
+          && inputMap[ga][1].id2 == id2)
+    return;
+  
+  // Removes the input from all mappings where it occurs.
+  unsetDuplicates(ga, it, id0, id1, id2);
+    
   // Setting a new value is implemented by shifting the value to the
   // right and applying the new values in the 1st location.
    

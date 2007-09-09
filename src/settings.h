@@ -33,11 +33,19 @@ private:
   static void readInput(const lisp::Lisp *, const char *, GameAction);
   static void setupDefaultActionMap();
   static void set(GameAction, InputType, int, int, int);
+  
+  /** Iterates through the input mapping and unsets all
+   * where the given input occurs.
+   * 
+   * This makes sure an input is not bound multiple times.
+   */
+  static void unsetDuplicates(GameAction, InputType, int, int, int);
 
   static std::string getConfigFilePath();
   static bool fileExists(const std::string&);
 
   static std::string getInputAsString(Input &);
+  
 
 public:
   static void init();

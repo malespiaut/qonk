@@ -28,6 +28,11 @@ void
 ControlOptions::finishSensing(GameAction ga, bool b)
 {
   main.finishSensing(ga, b);
+  
+  map <GameAction, MenuAction * >::iterator iter;   
+  for( iter = controlActions.begin(); iter != controlActions.end(); iter++ ) {
+    iter->second->update();
+  }
 }
 
 void
@@ -62,8 +67,6 @@ class ControlAction : public MenuAction
       if (sensing)
       {
         controlOptions.finishSensing(gameAction, true);
-        label->setCaption(base + Settings::getAsString(gameAction));
-        label->adjustSize();
         sensing = false;
       }
       else
@@ -80,8 +83,6 @@ class ControlAction : public MenuAction
       if (sensing)
       {
         controlOptions.finishSensing(gameAction, false);
-        label->setCaption(base + Settings::getAsString(gameAction));
-        label->adjustSize();
         sensing = false;
         
         // Report that an operation was interrupted (prevents
@@ -98,6 +99,13 @@ class ControlAction : public MenuAction
       label->setCaption(base + Settings::getAsString(gameAction));
       label->adjustSize();
     }
+    
+    void update()
+    {
+      label->setCaption(base + Settings::getAsString(gameAction));
+      label->adjustSize();
+    }
+    
 };
 
 MenuAction *
