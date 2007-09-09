@@ -237,10 +237,10 @@ MenuSystem::invoke()
 }
 
 void
-MenuSystem::leave()
+MenuSystem::cancel()
 {
   if (currentMenu)
-    currentMenu->leave();
+    currentMenu->cancel();
 
 }
 
@@ -252,7 +252,7 @@ MenuSystem::KeyListener::KeyListener(MenuSystem &menuSystem)
 void
 MenuSystem::KeyListener::keyReleased(KeyEvent &keyEvent)
 {
-  // MenuSystem does handle making itself visible. This is done from main.
+  // MenuSystem does not handle making itself visible. This is done from main.
   if (!system.currentMenu)
     return;
 

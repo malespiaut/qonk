@@ -63,7 +63,7 @@ class MenuSystem
 
     void enter(Menu::Id = Menu::MAIN);
 
-    void leave();
+    void cancel();
 
     void invoke();
 

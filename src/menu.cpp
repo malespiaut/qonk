@@ -142,6 +142,8 @@ Menu::cancel()
     entries->at(selected)->getWidget()->setFont(menuSystem->getHighlightedFont());
 
     menuSystem->enter(parentMenuId);
+    
+    cerr << "nothing was canceled" << endl;
   }
 }
 

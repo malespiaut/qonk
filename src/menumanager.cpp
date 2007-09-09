@@ -137,6 +137,6 @@ MenuManager::senseFinished(bool b)
   if (b)
     menuSystem->invoke();
   else
-    menuSystem->leave();
+    menuSystem->cancel();
 }
 

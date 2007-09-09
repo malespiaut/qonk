@@ -83,8 +83,13 @@ class ControlAction : public MenuAction
         label->setCaption(base + Settings::getAsString(gameAction));
         label->adjustSize();
         sensing = false;
+        
+        // Report that an operation was interrupted (prevents
+        // menu being left or menu system made invisible).
+        return true;
       }
-      return sensing;
+      
+      return false;
     }
     
     void reset()
