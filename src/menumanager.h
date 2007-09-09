@@ -51,6 +51,14 @@ class MenuManager
 
     bool update();
 
+    /** Indicate that input sensing should be finished.
+     * 
+     * If a new input has been determined and the operation should
+     * end as succeeded the argument's value is <code>true</code>.
+     * 
+     * If the operation should end as cancelled the argument's value
+     * is <code>false</code>.
+     * */
     void senseFinished(bool);
 
     GameOptions &getGameOptions() const { return *gameOptions; };

@@ -63,6 +63,18 @@ class MenuSystem
 
     void enter(Menu::Id = Menu::MAIN);
 
+    /** Cancels whatever operation is currently in progress.
+     * 
+     * At the moment the following operations are known:
+     * <ul>
+     * <li>A widget may have initiated the input sensing mode. If it is
+     * canceled the input mapping will not change.</li>
+     * 
+     * <li>A certain submenu is open. On canceling it will get close and
+     * enter its parent menu.</li>
+     * 
+     * <li>The main menu is open. On canceling it will be hidden.</li> 
+     */  
     void cancel();
 
     void invoke();

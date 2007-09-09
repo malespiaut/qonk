@@ -55,8 +55,12 @@ class Menu
 
     void registered(MenuSystem *);
 
+    /** Unconditionally make this menu visible.
+     */
     void enter();
 
+    /** Unconditionally make this menu invisible.
+     */
     void leave();
 
     gcn::Container *getContainer() const;
@@ -67,6 +71,9 @@ class Menu
 
     void down();
 
+    /** Cancels the operation of the currently selected widget. If there
+     * was no operation activate the parent menu.  
+     */
     void cancel();
 
     void invoke();
