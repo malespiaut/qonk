@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([qonk], [0.0.3-pre], [qonk-dev@lists.sf.net])
+AC_INIT([qonk], [0.3.0], [qonk-dev@lists.sf.net])
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
 

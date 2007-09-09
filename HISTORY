@@ -1,4 +1,4 @@
-0.0.3 - NOT_RELEASED_YET - 
+0.3.0 - released on 2007/09/09
 Features:
  - new project page: http//qonk.sf.net
  - public SVN repository: https://qonk.svn.sf.net/svnroot/qonk
@@ -17,6 +17,7 @@ Bugs fixed:
 other:
  - simplified initial planet claiming
  - remove need for static Timer variable
+ - switch to traditional MAJOR.MINOR.MICRO version number scheme
 
 rs-2007-02-17 - 2007-02-17 A modificated version
 Modificated qonk based on 0.0.2beta1 by Robert Schuster:

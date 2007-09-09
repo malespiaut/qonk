@@ -62,5 +62,4 @@ libguichan_a_SOURCES = 	\
 	mouselistener.hpp \
 	platform.hpp \
 	rectangle.hpp \
-	widget.hpp \
-	x.hpp
+	widget.hpp

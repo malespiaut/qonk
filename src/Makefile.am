@@ -7,11 +7,11 @@ INCLUDES = -I$(top_srcdir)/guichan
 bin_PROGRAMS = qonk
 
 qonk_LDADD = lisp/liblisp.a\
- $(top_builddir)/guichan/guichan/sdl/libguichan_sdl.a\
- $(top_builddir)/guichan/guichan/widgets/libguichan_widgets.a\
- $(top_builddir)/guichan/guichan/libguichan.a
+	$(top_builddir)/guichan/guichan/sdl/libguichan_sdl.a\
+	$(top_builddir)/guichan/guichan/widgets/libguichan_widgets.a\
+	$(top_builddir)/guichan/guichan/libguichan.a
 
-qonk_SOURCES = " \
+qonk_SOURCES = \
 	actions.cpp \
 	actions.h \
 	animations.cpp \
@@ -20,22 +20,22 @@ qonk_SOURCES = " \
 	canvas.h \
 	coordinate.cpp \
 	coordinate.h \
-    controloptions.cpp \
-    controloptions.h \
+	controloptions.cpp \
+	controloptions.h \
 	extensions.cpp \
 	extensions.h \
 	fonts.cpp \
 	fonts.h \
-    menu.cpp \
-    menu.h \
-    menuaction.cpp \
-    menuaction.h \
-    menuentry.cpp \
-    menuentry.h \
-    menumanager.cpp \
-    menumanager.h \
-    menusystem.cpp \
-    menusystem.h \
+	menu.cpp \
+	menu.h \
+	menuaction.cpp \
+	menuaction.h \
+	menuentry.cpp \
+	menuentry.h \
+	menumanager.cpp \
+	menumanager.h \
+	menusystem.cpp \
+	menusystem.h \
 	game.cpp \
 	game.h \
 	gameoptions.cpp \
@@ -63,5 +63,5 @@ qonk_SOURCES = " \
 	timer.h \
 	universe.cpp \
 	universe.h \
-        videooptions.cpp \
-        videooptions.h "
+	videooptions.cpp \
+	videooptions.h
