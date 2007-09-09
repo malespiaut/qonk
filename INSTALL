@@ -1,0 +1,9 @@
+Qonk uses GNU Autoconf to manage the compilation. Call
+
+        ./configure --help
+
+to see available options.
+
+Like all good applications Qonk is able to be run without installation. It tries
+to find its data files in ./data first and uses $(pkgdatadir)/data in a second
+attempt.
