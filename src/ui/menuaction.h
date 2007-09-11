@@ -9,8 +9,6 @@
 
 #include "guichan/guichan.hpp"
 
-class Main;
-
 /* TODO: Realize all customized behavior with specific MenuEntry subclasses
  * and remove the need for a MenuAction delegate object.
  */
@@ -32,17 +30,6 @@ class MenuAction
     virtual bool cancel() { return false; }
     
     virtual void reset() { }
-};
-
-class QuitAction : public MenuAction
-{
-  Main &main;
-
-  public:
-    QuitAction(Main &newMain)
-      : main(newMain) { }
-
-    void invoke();
 };
 
 #endif

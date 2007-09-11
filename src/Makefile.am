@@ -1,14 +1,15 @@
-SUBDIRS = lisp
-
-AM_CPPFLAGS=-DPKG_DATA_DIR="\"$(pkgdatadir)/\""
+SUBDIRS = lisp ui
 
 INCLUDES = -I$(top_srcdir)/guichan
 
+AM_CPPFLAGS=-DPKG_DATA_DIR="\"$(pkgdatadir)/\""
+
 bin_PROGRAMS = qonk
 
-qonk_LDADD = lisp/liblisp.a\
-	$(top_builddir)/guichan/guichan/sdl/libguichan_sdl.a\
-	$(top_builddir)/guichan/guichan/widgets/libguichan_widgets.a\
+qonk_LDADD = lisp/liblisp.a \
+	ui/libui.a \
+	$(top_builddir)/guichan/guichan/sdl/libguichan_sdl.a \
+	$(top_builddir)/guichan/guichan/widgets/libguichan_widgets.a \
 	$(top_builddir)/guichan/guichan/libguichan.a
 
 qonk_SOURCES = \
@@ -26,16 +27,8 @@ qonk_SOURCES = \
 	extensions.h \
 	fonts.cpp \
 	fonts.h \
-	menu.cpp \
-	menu.h \
-	menuaction.cpp \
-	menuaction.h \
-	menuentry.cpp \
-	menuentry.h \
 	menumanager.cpp \
 	menumanager.h \
-	menusystem.cpp \
-	menusystem.h \
 	game.cpp \
 	game.h \
 	gameoptions.cpp \

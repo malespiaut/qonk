@@ -66,4 +66,15 @@ class MenuManager
     VideoOptions &getVideoOptions() const { return *videoOptions; };
 };
 
+class QuitAction : public MenuAction
+{
+  Main &main;
+
+  public:
+    QuitAction(Main &newMain)
+      : main(newMain) { }
+
+    void invoke();
+};
+
 #endif

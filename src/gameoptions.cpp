@@ -5,11 +5,12 @@
 
 #include "guichan/guichan.hpp"
 
+#include "ui/menuaction.h"
+
 #include "settings.h"
+#include "main.h"
 
 #include "gameoptions.h"
-#include "menuaction.h"
-#include "main.h"
 
 using namespace std;
 using namespace gcn;

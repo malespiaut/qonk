@@ -21,7 +21,6 @@
 #include "videooptions.h"
 #include "gameoptions.h"
 
-
 using namespace std;
 
 Main::Main()

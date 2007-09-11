@@ -41,6 +41,7 @@ AC_CHECK_FUNCS([atexit mkdir select sqrt])
 AC_CONFIG_FILES([Makefile
                  data/Makefile
                  src/lisp/Makefile
+                 src/ui/Makefile
                  src/Makefile
                  guichan/Makefile
                  guichan/guichan/Makefile

@@ -3,8 +3,9 @@
 
 #include "guichan/guichan.hpp"
 
+#include "ui/menuaction.h"
+
 #include "controloptions.h"
-#include "menuaction.h"
 #include "main.h"
 #include "settings.h"
 

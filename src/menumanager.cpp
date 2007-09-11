@@ -1,8 +1,8 @@
 #include "menumanager.h"
-#include "menusystem.h"
-#include "menu.h"
 
-#include "menuaction.h"
+#include "ui/menusystem.h"
+#include "ui/menu.h"
+#include "ui/menuaction.h"
 
 #include "controloptions.h"
 #include "gameoptions.h"
@@ -140,3 +140,8 @@ MenuManager::senseFinished(bool b)
     menuSystem->cancel();
 }
 
+void
+QuitAction::invoke()
+{
+  main.quit();
+}

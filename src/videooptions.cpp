@@ -5,10 +5,11 @@
 
 #include "guichan/guichan.hpp"
 
+#include "ui/menuaction.h"
+
 #include "settings.h"
 
 #include "videooptions.h"
-#include "menuaction.h"
 #include "main.h"
 
 using namespace std;
