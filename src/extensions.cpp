@@ -1,15 +1,19 @@
 // Copyright 2005 by Anthony Liekens anthony@liekens.net
+
+#include <cstdlib>
 #include <SDL/SDL_gfxPrimitives.h>
 
 #include "extensions.h"
 
+using namespace std;
+
 double
 frand() {
-	return (double)rand() / RAND_MAX;
+	return (double) rand() / RAND_MAX;
 }
 
 double
-frand( double max ) {
+frand(double max) {
 	return max * frand();
 }
 
