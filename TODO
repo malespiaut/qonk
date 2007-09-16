@@ -1,17 +1,26 @@
-AI to hunt for the large planets first
+* AI to hunt for the large planets first
 
-Difficulty level: 
-EASY: HumanPlayer build ships faster
-NORMAL: As is
-HARD: Can't see enemys ships
+* difficulty level: 
+ - EASY: HumanPlayer build ships faster
+ - NORMAL: As is
+ - HARD: Can't see enemys ships
 
-Animated sun
-	Fluctuationg length
-	drawSun(); function
+* animated sun
+  - Fluctuationg length
+  - drawSun(); function
 
-Add network multiplayer
+* add the notion of players to the game model
+  - Player::TYPE should not be neccessary
+  - add network multiplayer
+  - add single-machine multiplayer
 
-Add single-machine multiplayer
+* replace guichan. It is not used that much.
+  - write own menu entry drawing code
+  - find or draw some nice fonts
 
-Replace guichan. It is not used that much.
+* simplify the menu system code
 
+* add gettext() support for i18n
+
+* integrate Łukasz' source code fixes:
+  - http://sourceforge.net/mailarchive/forum.php?thread_name=46EA908D.2090306%40szift.org&forum_name=qonk-devel
