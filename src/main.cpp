@@ -12,9 +12,9 @@
 #include "sdl_driver.h"
 #include "settings.h"
 
-#include "canvas.h"
+#include "engine/canvas.h"
 
-#include "game.h"
+#include "engine/game.h"
 #include "main.h"
 
 #include "menumanager.h"
@@ -106,10 +106,14 @@ Main::applyVideoOptions(VideoOptions &videoOptions)
       // Causes the game to pause which is nice when the CRT/TFT is resyncing.
       showMenu();
 
-      Settings::setFullscreen(videoOptions.getFullscreen());
-      Settings::setScreenSize(videoOptions.getScreenWidth(), videoOptions.getScreenHeight());
+      bool f = videoOptions.getFullscreen();
+      int w = videoOptions.getScreenWidth();
+      int h = videoOptions.getScreenHeight();
 
-      Canvas::initScreen();
+      Settings::setFullscreen(f);
+      Settings::setScreenSize(w, h);
+
+      Canvas::initScreen(w, h, f);
 
       menuManager->resize();
 }

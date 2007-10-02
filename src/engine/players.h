@@ -13,6 +13,7 @@ class Universe;
 class Planet;
 class Selection;
 class Game;
+class Coordinate;
 
 class Player {
 public:
@@ -72,11 +73,11 @@ public:
 
   int getFleetStrength() const { return fleetStrength; }
 
-  void selectPlanetAt(int, int);
+  void selectPlanetAt(Coordinate &);
 
-  void selectNearestPlanet(int, int);
+  void selectNearestPlanet(Coordinate &);
 
-  void moveToNearestPlanet(Uint32, int, int);
+  void moveToNearestPlanet(Uint32, Coordinate &);
 };
 
 class ComputerPlayer : public Player {

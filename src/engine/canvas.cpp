@@ -4,15 +4,17 @@
 #include <SDL/SDL_gfxPrimitives.h>
 
 #include "canvas.h"
-
-#include "extensions.h"
 #include "coordinate.h"
-#include "settings.h"
-#include "fonts.h"
+#include "extensions.h"
+
+#include "../fonts.h"
 
 SDL_Surface* Canvas::main = 0;
 
 gcn::SDLGraphics *Canvas::sdlGraphics = 0;
+int Canvas::width = 0;
+int Canvas::height = 0;
+int Canvas::gameOffsetX = 0;
 
 Font* Canvas::font = 0;
 
@@ -67,12 +69,14 @@ Canvas::drawNearestPlanetSelector(Coordinate &c, int size)
 }
 
 void
-Canvas::drawPlanet( Coordinate &loc, int size, Uint32 color ) {
+Canvas::drawPlanet( Coordinate &loc, int size, Uint32 color )
+{
 	drawPlanetMapped(loc.getXMapped(), loc.getYMapped(), size, color);
 }
 
 void
-Canvas::drawPlanetMapped(int x, int y, int size, Uint32 color ) {
+Canvas::drawPlanetMapped(int x, int y, int size, Uint32 color )
+{
 	int R = getRed(color);
 	int G = getGreen(color);
 	int B = getBlue(color);
@@ -141,8 +145,8 @@ Canvas::drawOrbit(Coordinate &center, double rotationDistance, int color)
 	int b = getBlue(color);
 
 	aaellipseRGBA(main, center.getXMapped(), center.getYMapped(),
-		      (int) (rotationDistance * Settings::getGameWidth()),
-                      (int) (rotationDistance * Settings::getGameHeight()),
+		      (int) (rotationDistance * height),
+                      (int) (rotationDistance * height),
 		      r, g, b, 64);
 }
 
@@ -181,27 +185,27 @@ Canvas::drawRadar()
 
     double s = 1.0 / radarSteps;
     for( int i = 1; i <= radarSteps; i++ ) {
-        aaellipseRGBA( main, Settings::getGameOffsetX() + Settings::getGameWidth() / 2,
-                Settings::getGameHeight() / 2, (int) (i * s * Settings::getGameWidth() / 2),
-                (int)( i * s * Settings::getGameHeight() / 2 ), 144, 225, 144, 64 );
+        aaellipseRGBA( main, gameOffsetX + height / 2,
+                height / 2, (int) (i * s * height / 2),
+                (int)( i * s * height / 2 ), 144, 225, 144, 64 );
     }
     lineRGBA( main,
-          Settings::getGameOffsetX() + Settings::getGameWidth() / 2, 0,
-          Settings::getGameOffsetX() + Settings::getGameWidth() / 2,
-          Settings::getGameHeight(), 255, 225, 144, 64 );
+          gameOffsetX + height / 2, 0,
+          gameOffsetX + height / 2,
+          height, 255, 225, 144, 64 );
     lineRGBA( main,
-          Settings::getGameOffsetX(),
-          Settings::getGameHeight() / 2,
-          Settings::getGameOffsetX() + Settings::getGameWidth(),
-          Settings::getGameHeight() / 2, 255, 225, 144, 64 );
+          gameOffsetX,
+          height / 2,
+          gameOffsetX + height,
+          height / 2, 255, 225, 144, 64 );
 }
 
 void
 Canvas::drawSun()
 {
     // Sun in the middle
-    Sint16 x0 = Settings::getGameOffsetX() + Settings::getGameWidth() / 2;
-    Sint16 y0 = Settings::getGameHeight() / 2;
+    Sint16 x0 = gameOffsetX + height / 2;
+    Sint16 y0 = height / 2;
 
     filledTrigonRGBA( main, x0+5, y0, x0-5,y0, x0, y0+15, 255, 205, 0, 255);
     filledTrigonRGBA( main, x0+5, y0, x0-5,y0, x0, y0-15, 255, 205, 0, 255);
@@ -249,11 +253,8 @@ Canvas::drawSonar(Coordinate coord, int size, double percentage, int r, int g, i
 void
 Canvas::drawPlayerStat(int size, int index, int previousValue, int currentValue, int r, int g, int b)
 {
-  int w = Settings::getScreenWidth();
-  int h = Settings::getScreenHeight();
-
-  aalineRGBA( main, w - size + index - 1, h - previousValue,
-                    w - size + index, h - currentValue,
+  aalineRGBA( main, width - size + index - 1, height - previousValue,
+                    width - size + index, height - currentValue,
                     r, g, b,  index * 2 );
 }
 
@@ -265,13 +266,13 @@ Canvas::drawMouseSelection(Coordinate &c1, Coordinate &c2)
 }
 
 void
-Canvas::drawCursor(int x, int y)
+Canvas::drawCursor(Coordinate &c)
 {
-    aacircleRGBA( main, x,y, 4, 255, 255, 255, 255 );
+    aacircleRGBA( main, c.getXMapped(), c.getYMapped(), 4, 255, 255, 255, 255 );
 }
 
 void
-Canvas::initScreen()
+Canvas::initScreen(int w, int h, bool fullscreen)
 {
   if (!sdlGraphics)
     sdlGraphics = new gcn::SDLGraphics();
@@ -280,11 +281,28 @@ Canvas::initScreen()
      font = new Font("font.ttf", 18);
 
 	long flags = SDL_SWSURFACE | SDL_HWSURFACE;
-	if (Settings::getFullscreen())
-          flags |= SDL_FULLSCREEN;
-
-	main = SDL_SetVideoMode( Settings::getScreenWidth(), Settings::getScreenHeight(), 0, flags);
+  
+	if (fullscreen)
+    flags |= SDL_FULLSCREEN;
+          
+  width = w;
+  height = h;
+  gameOffsetX = ( w - h ) / 2;
+  
+	main = SDL_SetVideoMode( w, h, 0, flags);
   sdlGraphics->setTarget(main);
+}
+
+int
+Canvas::getWidth()
+{
+  return width;
+}
+
+int
+Canvas::getHeight()
+{
+  return height;
 }
 
 void

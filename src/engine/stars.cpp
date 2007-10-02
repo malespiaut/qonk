@@ -3,12 +3,13 @@
 #include "coordinate.h"
 #include "stars.h"
 #include "canvas.h"
+#include "extensions.h"
 
 // ##### STAR METHODS #####
 
 Star::Star() {
-	c.setX( (double)rand() / RAND_MAX );
-	c.setY( (double)rand() / RAND_MAX );
+	c.setX( frand() );
+	c.setY( frand() );
 	brightness = rand() % ( 255 - 70 );
 }
 

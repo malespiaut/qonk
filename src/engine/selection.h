@@ -13,8 +13,8 @@ class Selection {
 public:
 	Selection();
 
-        void start(int, int);
-        void update(int, int);
+        void start(Coordinate &);
+        void update(Coordinate &);
         void end();
 
 	void render();

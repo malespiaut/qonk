@@ -5,8 +5,6 @@
 #include "planets.h"
 #include "timer.h"
 #include "ships.h"
-#include "extensions.h"
-#include "settings.h"
 #include "animations.h"
 #include "coordinate.h"
 #include "selection.h"
@@ -21,8 +19,10 @@ using namespace std;
 
 Planet::Planet() : nearestPlanet(false), owner(), mother()
 {
-	rotationSpeed = ( ( rand() % 2 ) * 2 - 1 ) * ( rand() % 60000 + 20000 );
-	rotationDistance = 0.05 + 0.4 * ( double )rand() / RAND_MAX;
+//	rotationSpeed = ( ( rand() % 2 ) * 2 - 1 ) * ( rand() % 60000 + 20000 );
+	rotationSpeed = 1000;
+//	rotationDistance = 0.05 + 0.4 * ( double )rand() / RAND_MAX;
+	rotationDistance = 0.1;
 	rotationOffset = rand() % 10000000;
 	size = 4 + rand() % 4; // [4 ... 8)
 	isAMoon = false;
@@ -199,8 +199,6 @@ void
 Planet::renderBuildProgress(Uint32 time) const {
 
 	Coordinate location = getLocation();
-	int x = location.getXMapped();
-	int y = location.getYMapped();
 	double percentage = 100.0 * ( time - buildStartTime ) / ( buildEndTime - buildStartTime );
 
 	Canvas::drawBuildProgress(location, size, percentage);

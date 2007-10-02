@@ -2,7 +2,6 @@
 
 #include "actions.h"
 
-#include "settings.h"
 #include <iostream>
 
 // ##### ACTION #####

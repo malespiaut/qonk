@@ -9,8 +9,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "input.h"
-#include "timer.h"
+#include <SDL/SDL.h>
+#include "../input.h"
 
 class Universe;
 class Players;
@@ -19,6 +19,8 @@ class Message;
 class Messages;
 class Selection;
 class GameOptions;
+class Timer;
+class Coordinate;
 
 class Game {
 
@@ -60,14 +62,8 @@ private:
 
         void moveToNearestPlanet(int, int);
 
-        void startSelection(int, int);
-
-        void updateSelection(int, int);
-
-        void endSelection(int, int);
-
         /** Location of the soft cursor. */
-        int x, y;
+        Coordinate *cursor;
 
         /** Current cursor movement forces: x positive, x negative and the same for y. */
         int xp, xn, yp, yn;

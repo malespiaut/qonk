@@ -29,10 +29,6 @@ int Settings::screenWidth = 0;
 int Settings::screenHeight = 0;
 bool Settings::fullscreen = false;
 
-int Settings::gameWidth = 0;
-int Settings::gameHeight = 0;
-int Settings::gameOffsetX = 0;
-
 int Settings::numberOfPlanets = 6;
 int Settings::numberOfComputerPlayers = 1;
 bool Settings::enemyVisibility = false;
@@ -178,9 +174,6 @@ void
 Settings::setScreenSize( int width, int height ) {
   screenWidth = width;
   screenHeight = height;
-  gameWidth = height;
-  gameHeight = height;
-  gameOffsetX = ( width - height ) / 2;
 }
 
 void
@@ -258,7 +251,7 @@ Settings::readInput(const lisp::Lisp* r,
                        GameAction action)
 {
     string inputTypeName;
-    char *which[] = { "normal", "alternate" };
+    const char *which[] = { "normal", "alternate" };
 
     const Lisp* nodeReader = r->getLisp(node);
     if (!nodeReader)

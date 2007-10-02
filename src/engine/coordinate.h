@@ -12,9 +12,10 @@ public:
 	
 	void setX( double x );
 	void setY( double y );
+
 	void setXMapped( int x );
 	void setYMapped( int y );
-	
+
 	double getX() const;
 	double getY() const;
 	int getXMapped() const;

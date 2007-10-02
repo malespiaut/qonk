@@ -10,7 +10,8 @@
 #include "actions.h"
 #include "animations.h"
 #include "timer.h"
-#include "settings.h"
+#include "coordinate.h"
+
 #include "canvas.h"
 
 Universe::Universe() : currentSelectedPlanet(0) {
@@ -47,11 +48,9 @@ Universe::update(Uint32 time) {
 }
 
 void
-Universe::highlightNearestPlanet(int x, int y)
+Universe::highlightNearestPlanet(Coordinate &c)
 {
-	double pointerX = ( (double)x - Settings::getGameOffsetX() ) / Settings::getGameWidth();
-	double pointerY = (double)y / Settings::getGameHeight();
-	Planet* closestPlanet = planets->closestToCoordinate( Coordinate( pointerX, pointerY ), 1 );
+	Planet* closestPlanet = planets->closestToCoordinate( c, 1 );
 
   if (currentSelectedPlanet)
 	  currentSelectedPlanet->setNearestPlanet(false);

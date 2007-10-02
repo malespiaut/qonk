@@ -6,7 +6,7 @@ AC_INIT([qonk], [0.3.0], [qonk-dev@lists.sf.net])
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
 
-AC_CONFIG_SRCDIR([src/animations.h])
+AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.

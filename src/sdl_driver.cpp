@@ -7,8 +7,7 @@
 #include <cstdio>
 
 #include "sdl_driver.h"
-#include "canvas.h"
-#include "timer.h"
+#include "engine/canvas.h"
 #include "input.h"
 #include "settings.h"
 
@@ -44,7 +43,7 @@ SDLDriver::SDLDriver(InputHandler &ih) : inputHandler(ih), sensedInput(0)
     SDL_WM_SetCaption("Qonk - input not grabbed - press G to toggle", NULL);
     SDL_ShowCursor(SDL_DISABLE);
 
-    Canvas::initScreen();
+    Canvas::initScreen(Settings::getScreenWidth(), Settings::getScreenHeight(), Settings::getFullscreen());
 
     const int NUM_STICKS = SDL_NumJoysticks();
     sticks = (SDL_Joystick **) std::malloc(sizeof(SDL_Joystick *) * NUM_STICKS);
