@@ -50,14 +50,14 @@ class MenuSystem
   static gcn::Image *loadImage(std::string);
 
   public:
-    MenuSystem(gcn::SDLInput *);
+    MenuSystem(gcn::SDLInput *, gcn::SDLGraphics *);
     ~MenuSystem();
 
     void render();
 
     bool update();
 
-    void resize();
+    void resize(int, int);
 
     void addMenu(Menu::Id, Menu *);
 
