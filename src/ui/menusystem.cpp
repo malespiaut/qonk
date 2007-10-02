@@ -1,21 +1,18 @@
 #include <iostream>
 
-#include "settings.h"
-#include "canvas.h"
-
 #include "menusystem.h"
 #include "menu.h"
 
 using namespace gcn;
 using namespace std;
 
-MenuSystem::MenuSystem(SDLInput *input)
+MenuSystem::MenuSystem(SDLInput *input, SDLGraphics *graphics)
   : currentMenu(0)
 {
   gui = new Gui();
   
   gui->setInput(input);
-  gui->setGraphics(Canvas::getSDLGraphics());
+  gui->setGraphics(graphics);
   Image::setImageLoader(new SDLImageLoader());
 
   menuKeyListener = new MenuSystem::KeyListener(*this);
@@ -29,7 +26,6 @@ MenuSystem::MenuSystem(SDLInput *input)
   top->setOpaque(false);
   top->setVisible(true);
   top->setPosition(0,0);
-  top->setDimension(Rectangle(0, 0, Settings::getScreenWidth(), Settings::getScreenHeight()));
 
   gui->setTop(top);
 
@@ -77,10 +73,8 @@ MenuSystem::update()
 }
 
 void
-MenuSystem::resize()
+MenuSystem::resize(int w, int h)
 {
-  int w = Settings::getScreenWidth();
-  int h =  Settings::getScreenHeight();
   top->setSize(w, h);
 
   for (map< Menu::Id, Menu * >::iterator i = menus->begin(); i != menus->end(); i++)
