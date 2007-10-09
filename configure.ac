@@ -42,6 +42,7 @@ AC_CONFIG_FILES([Makefile
                  data/Makefile
                  src/lisp/Makefile
                  src/ui/Makefile
+                 src/engine/Makefile
                  src/Makefile
                  guichan/Makefile
                  guichan/guichan/Makefile
