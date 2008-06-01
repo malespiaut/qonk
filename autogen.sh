@@ -1,3 +1,4 @@
 #!/bin/sh
+# [Re]generate autoconf files.
 
-aclocal && automake --foreign --add-missing --copy && autoheader && autoconf
+autoreconf --install "$@"
