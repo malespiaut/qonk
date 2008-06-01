@@ -19,10 +19,8 @@ using namespace std;
 
 Planet::Planet() : nearestPlanet(false), owner(), mother()
 {
-//	rotationSpeed = ( ( rand() % 2 ) * 2 - 1 ) * ( rand() % 60000 + 20000 );
-	rotationSpeed = 1000;
-//	rotationDistance = 0.05 + 0.4 * ( double )rand() / RAND_MAX;
-	rotationDistance = 0.1;
+	rotationSpeed = ( ( rand() % 2 ) * 2 - 1 ) * ( rand() % 60000 + 20000 );
+	rotationDistance = 0.05 + 0.4 * ( double )rand() / RAND_MAX;
 	rotationOffset = rand() % 10000000;
 	size = 4 + rand() % 4; // [4 ... 8)
 	isAMoon = false;
