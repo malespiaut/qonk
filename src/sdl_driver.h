@@ -27,9 +27,9 @@ public:
 
    gcn::SDLInput *getSDLInput();
 
-    Input &getSensedInput();
+   Input &getSensedInput();
 
-    void initActionMap();
+   void initActionMap();
 
    void setSenseMode(bool);
 
