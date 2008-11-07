@@ -22,6 +22,7 @@
 #include <fstream>
 
 #include <cassert>
+#include <cstring>
 
 #include "parser.hpp"
 #include "lisp.hpp"

@@ -20,7 +20,7 @@ enum AxisDirection
         AD_POSITIVE
 };
 
-typedef struct Input
+struct Input
 {
         InputType inputType;
 

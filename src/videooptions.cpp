@@ -1,5 +1,6 @@
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 #include <SDL/SDL.h>
 

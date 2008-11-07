@@ -46,7 +46,7 @@ SDLDriver::SDLDriver(InputHandler &ih) : inputHandler(ih), sensedInput(0)
     Canvas::initScreen(Settings::getScreenWidth(), Settings::getScreenHeight(), Settings::getFullscreen());
 
     const int NUM_STICKS = SDL_NumJoysticks();
-    sticks = (SDL_Joystick **) std::malloc(sizeof(SDL_Joystick *) * NUM_STICKS);
+    sticks = new SDL_Joystick*[NUM_STICKS];
     for (int i=0;i<NUM_STICKS;i++)
         sticks[i] = SDL_JoystickOpen(i);
 
@@ -83,7 +83,7 @@ SDLDriver::~SDLDriver()
 {
   SDL_ShowCursor(SDL_ENABLE);
 
-  std::free(sticks);
+  delete sticks;
 
   Canvas::shutdown();
 
