@@ -3,9 +3,13 @@ cmake_minimum_required(VERSION 2.6)
 project(QONK)
 set(PACKAGE_STRING "Qonk 0.3.0")
 
-set(DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" CACHE)
+set(DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share")
 set(DATADIR "${DATAROOTDIR}/games/qonk")
-set(BINDIR "${CMAKE_INSTALL_PREFIX}"/bin)
+set(BINDIR "${CMAKE_INSTALL_PREFIX}/bin")
+set(LIBDIR "${CMAKE_INSTALL_PREFIX}/lib")
+set(PACKAGE_LIBDIR "${CMAKE_INSTALL_PREFIX}/lib/qonk")
+
+set(CMAKE_INSTALL_RPATH "${PACKAGE_LIBDIR}")
 
 enable_language(CXX)
 
@@ -16,4 +20,5 @@ find_library(SDLGFX_LIBRARY SDL_gfx)
 
 add_subdirectory(guichan)
 add_subdirectory(src)
+add_subdirectory(data)
 

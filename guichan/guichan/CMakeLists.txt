@@ -15,3 +15,5 @@ add_library(guichan SHARED
 	rectangle.cpp widget.cpp
 )
 target_link_libraries(guichan guichan_sdl guichan_widgets)
+
+install(TARGETS guichan LIBRARY DESTINATION ${PACKAGE_LIBDIR})

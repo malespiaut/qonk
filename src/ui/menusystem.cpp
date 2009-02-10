@@ -108,7 +108,7 @@ ImageFont *
 MenuSystem::loadFont(string fileName)
 {
   ImageFont *font = 0;
-  std::string s = PKG_DATA_DIR;
+  std::string s = PKG_DATA_DIR "/";
   s += fileName;
 
   try
@@ -150,7 +150,7 @@ Image *
 MenuSystem::loadImage(string fileName)
 {
   Image *image = 0;
-  std::string s = PKG_DATA_DIR;
+  std::string s = PKG_DATA_DIR "/";
   s += fileName;
 
   try

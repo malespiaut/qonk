@@ -26,3 +26,5 @@ target_link_libraries(qonk
 	guichan guichan_widgets guichan_sdl engine lisp ui
 	${SDL_LIBRARY} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLGFX_LIBRARY}
 )
+
+install(TARGETS qonk DESTINATION ${BINDIR})

@@ -5,3 +5,4 @@ add_library(guichan_sdl SHARED
 )
 target_link_libraries(guichan_sdl ${SDL_LIBRARY})
 
+install(TARGETS guichan_sdl DESTINATION ${PACKAGE_LIBDIR})

@@ -7,7 +7,7 @@
 using namespace std;
 
 Font::Font( const char* fileName, int size ) {
-  std::string s = PKG_DATA_DIR;
+  std::string s = PKG_DATA_DIR "/";
   s += fileName;
 
   if (font = TTF_OpenFont (s.c_str(), size)) {
