@@ -1,4 +1,4 @@
 add_library(engine STATIC actions.cpp animations.cpp canvas.cpp coordinate.cpp extensions.cpp game.cpp messages.cpp planets.cpp players.cpp selection.cpp ships.cpp stars.cpp timer.cpp universe.cpp)
 
-add_definitions(-DPKG_DATA_DIR="${QONK_DATA_DIR}")
+add_definitions(-DPKG_DATA_DIR="${DATADIR}")
 include_directories(${QONK_SOURCE_DIR}/guichan ${SDL_INCLUDE_DIR})

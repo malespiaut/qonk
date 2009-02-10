@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(QONK)
-set(QONK_DATA_DIR ${CMAKE_INSTALL_PREFIX}/share/games/qonk)
 set(PACKAGE_STRING "Qonk 0.3.0")
+
+set(DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" CACHE)
+set(DATADIR "${DATAROOTDIR}/games/qonk")
+set(BINDIR "${CMAKE_INSTALL_PREFIX}"/bin)
 
 enable_language(CXX)
 

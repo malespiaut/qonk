@@ -3,7 +3,7 @@ add_subdirectory(engine)
 add_subdirectory(ui)
 
 add_definitions(
-	-DPKG_DATA_DIR="${QONK_DATA_DIR}"
+	-DPKG_DATA_DIR="${DATADIR}"
 	-DPACKAGE_STRING="${PACKAGE_STRING}"
 )
 
