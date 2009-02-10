@@ -4,7 +4,7 @@
 
 #include <SDL/SDL.h>
 
-#include "guichan/guichan.hpp"
+#include <guichan.hpp>
 
 #include "ui/menuaction.h"
 

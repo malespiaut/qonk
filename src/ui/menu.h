@@ -9,7 +9,7 @@
 
 #include <vector>
 
-#include "guichan/guichan.hpp"
+#include "guichan.hpp"
 
 class MenuSystem;
 class MenuEntry;

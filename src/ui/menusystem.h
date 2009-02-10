@@ -9,8 +9,8 @@
 
 #include <map>
 
-#include "guichan/guichan.hpp"
-#include "guichan/guichan/sdl.hpp"
+#include "guichan.hpp"
+#include "guichan/sdl.hpp"
 
 #include "menu.h"
 

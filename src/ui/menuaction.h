@@ -7,7 +7,7 @@
 #ifndef MENUACTION_H
 #define MENUACTION_H
 
-#include "guichan/guichan.hpp"
+#include "guichan.hpp"
 
 /* TODO: Realize all customized behavior with specific MenuEntry subclasses
  * and remove the need for a MenuAction delegate object.

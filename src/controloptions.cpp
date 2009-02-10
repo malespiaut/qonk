@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
 
-#include "guichan/guichan.hpp"
+#include <guichan.hpp>
 
 #include "ui/menuaction.h"
 

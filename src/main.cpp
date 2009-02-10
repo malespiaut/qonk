@@ -225,7 +225,7 @@ int main(int argc, char** argv) {
 
   cout << "This is " << PACKAGE_STRING << endl;
   cout << "(c) 2003 Anthony Liekens" << endl;
-  cout << "(c) 2007 Qonk development team" << endl;
+  cout << "(c) 2007, 2008, 2009 Qonk development team" << endl;
   cout << "This game is free software released under the GNU General Public License, " << endl;
   cout << "either version 2 of the license or, at your option, any later version. " << endl;
 

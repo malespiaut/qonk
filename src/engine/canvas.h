@@ -10,7 +10,7 @@
 
 #include <SDL/SDL.h>
 
-#include "guichan/guichan/sdl.hpp"
+#include "guichan/sdl.hpp"
 
 class Coordinate;
 class Font;

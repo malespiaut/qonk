@@ -9,8 +9,8 @@
 
 #include <SDL/SDL.h>
 
-#include "guichan/guichan.hpp"
-#include "guichan/guichan/sdl.hpp"
+#include <guichan.hpp>
+#include <guichan/sdl.hpp>
 
 #include "input.h"
 

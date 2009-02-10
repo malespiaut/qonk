@@ -7,7 +7,7 @@
 #ifndef MENUENTRY_H
 #define MENUENTRY_H
 
-#include "guichan/guichan.hpp"
+#include "guichan.hpp"
 
 class MenuSystem;
 

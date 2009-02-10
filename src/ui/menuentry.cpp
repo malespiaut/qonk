@@ -1,4 +1,4 @@
-#include "guichan/guichan.hpp"
+#include "guichan.hpp"
 
 #include "menuentry.h"
 #include "menusystem.h"
