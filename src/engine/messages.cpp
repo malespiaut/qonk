@@ -21,8 +21,8 @@ Message::Message( Uint32 time, string message, Uint32 displayTime, Uint8 r, Uint
 Message::Message( Uint32 time, string message, Uint32 displayTime, Uint32 color ) {
   this->message = string( "[" ) + Timer::getTimeMMSS(time) + "] " + message;
   this->displayTime = displayTime;
-  this->r = getGreen( color );
-  this->g = getRed( color );
+  this->r = getRed( color );
+  this->g = getGreen( color );
   this->b = getBlue( color );
 }
 
@@ -37,8 +37,8 @@ Message::Message( Uint32 time, string message, Uint8 r, Uint8 g, Uint8 b ) {
 Message::Message( Uint32 time, string message, Uint32 color ) {
   this->message = string( "[" ) + Timer::getTimeMMSS(time) + "] " + message;
   this->displayTime = 10000;
-  this->r = getGreen( color );
-  this->g = getRed( color );
+  this->r = getRed( color );
+  this->g = getGreen( color );
   this->b = getBlue( color );
 }
 
