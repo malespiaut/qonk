@@ -20,6 +20,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <cstring>
+#include <cstdio>
 
 #include "lexer.hpp"
 #include "translation.hpp"
