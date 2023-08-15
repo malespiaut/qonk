@@ -13,6 +13,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_RANLIB
+AC_PROG_INSTALL
 
 AC_LANG([C])
 
@@ -27,15 +28,18 @@ AC_CHECK_LIB([SDL_gfx], [pixelColor], ,AC_MSG_ERROR([SDL_gfx missing. Please ins
 AC_CHECK_LIB([SDL_image], [IMG_Load], ,AC_MSG_ERROR([SDL_image missing. Please install at least version 1.2!]))
 
 # Checks for header files.
+AC_CHECK_HEADERS([libintl.h])
 AC_CHECK_HEADERS([stdlib.h SDL/SDL.h SDL/SDL_gfxPrimitives.h SDL/SDL_ttf.h SDL/SDL_image.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
 AC_C_CONST
+AC_C_INLINE
+AC_HEADER_STDBOOL
+AC_TYPE_SIZE_T
 
 # Checks for library functions.
 AC_FUNC_SELECT_ARGTYPES
-AC_CHECK_FUNCS([atexit mkdir select sqrt])
+AC_CHECK_FUNCS([atexit memset mkdir select sqrt strchr])
 
 AC_CONFIG_FILES([Makefile
                  data/Makefile
