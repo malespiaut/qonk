@@ -1,20 +1,20 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.61)
-AC_INIT([qonk], [0.3.0], [qonk-dev@lists.sf.net])
+AC_PREREQ([2.71])
+AC_INIT([qonk],[0.3.0],[qonk-dev@lists.sf.net])
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([src/main.cpp])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_RANLIB
 
-AC_LANG_C
+AC_LANG([C])
 
 AM_PATH_SDL([1.2.0], [:],
 	AC_MSG_ERROR([No proper SDL found. Please install at least version 1.2.0!]))
@@ -27,7 +27,6 @@ AC_CHECK_LIB([SDL_gfx], [pixelColor], ,AC_MSG_ERROR([SDL_gfx missing. Please ins
 AC_CHECK_LIB([SDL_image], [IMG_Load], ,AC_MSG_ERROR([SDL_image missing. Please install at least version 1.2!]))
 
 # Checks for header files.
-AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h SDL/SDL.h SDL/SDL_gfxPrimitives.h SDL/SDL_ttf.h SDL/SDL_image.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
