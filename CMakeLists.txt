@@ -12,6 +12,7 @@ set(PACKAGE_LIBDIR "${CMAKE_INSTALL_PREFIX}/lib/qonk")
 set(CMAKE_INSTALL_RPATH "${PACKAGE_LIBDIR}")
 
 enable_language(CXX)
+set(CMAKE_CXX_STANDARD 23)
 
 find_package(SDL 1.2 REQUIRED)
 find_package(SDL_ttf REQUIRED)
