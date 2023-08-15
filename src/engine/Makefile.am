@@ -1,7 +1,5 @@
 AM_CPPFLAGS = -DPKG_DATA_DIR="\"$(pkgdatadir)/\"" -I$(top_srcdir)/guichan
 
-INCLUDES = -I$(top_srcdir)/guichan
-
 noinst_LIBRARIES = libengine.a
 
 libengine_a_SOURCES = \
