@@ -2,7 +2,7 @@
 
 noinst_LIBRARIES = libguichan_sdl.a
 
-INCLUDES = -I$(top_srcdir)/guichan
+AM_CPPFLAGS = -I$(top_srcdir)/guichan
 
 libguichan_sdl_a_SOURCES =	\
 	sdl.cpp			\

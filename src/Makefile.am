@@ -1,8 +1,6 @@
 SUBDIRS = lisp ui engine
 
-INCLUDES = -I$(top_srcdir)/guichan
-
-AM_CPPFLAGS=-DPKG_DATA_DIR="\"$(pkgdatadir)/\""
+AM_CPPFLAGS = -DPKG_DATA_DIR="\"$(pkgdatadir)/\"" -I$(top_srcdir)/guichan
 
 bin_PROGRAMS = qonk
 

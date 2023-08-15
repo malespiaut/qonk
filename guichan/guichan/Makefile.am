@@ -1,6 +1,6 @@
 SUBDIRS = widgets sdl
 
-INCLUDES = -I$(top_srcdir)/guichan
+AM_CPPFLAGS = -I$(top_srcdir)/guichan
 
 noinst_LIBRARIES = libguichan.a
 

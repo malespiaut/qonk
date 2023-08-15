@@ -1,4 +1,4 @@
-AM_CPPFLAGS=-DPKG_DATA_DIR="\"$(pkgdatadir)/\""
+AM_CPPFLAGS = -DPKG_DATA_DIR="\"$(pkgdatadir)/\"" -I$(top_srcdir)/guichan
 
 INCLUDES = -I$(top_srcdir)/guichan
 
@@ -33,4 +33,3 @@ libengine_a_SOURCES = \
 	universe.h \
 	timer.cpp \
 	timer.h
-	

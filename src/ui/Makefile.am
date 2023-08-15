@@ -1,6 +1,4 @@
-AM_CPPFLAGS=-DPKG_DATA_DIR="\"$(pkgdatadir)/\""
-
-INCLUDES = -I$(top_srcdir)/guichan
+AM_CPPFLAGS = -DPKG_DATA_DIR="\"$(pkgdatadir)/\"" -I$(top_srcdir)/guichan
 
 noinst_LIBRARIES = libui.a
 

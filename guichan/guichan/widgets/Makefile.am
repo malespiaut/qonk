@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libguichan_widgets.a
 
-INCLUDES = -I$(top_srcdir)/guichan
+AM_CPPFLAGS = -I$(top_srcdir)/guichan
 
 libguichan_widgets_a_SOURCES = \
 	button.cpp		\
