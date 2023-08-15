@@ -183,7 +183,9 @@ Ship::getDirection() const {
 		double angle = acos( dx / l );
 		if( dy < 0 ) angle = -angle;
 		return angle;
-	}
+	} else {
+    return NAN;
+  }
 }
 
 /* ##### SHIPS ##### */
