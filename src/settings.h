@@ -62,10 +62,10 @@ public:
   static int getScreenHeight() { return screenHeight; }
 
   static int getNumberOfPlanets() { return numberOfPlanets; }
-  static int setNumberOfPlanets(int p) { numberOfPlanets = p; }
+  static void setNumberOfPlanets(int p) { numberOfPlanets = p; }
 
   static int getNumberOfComputerPlayers() { return numberOfComputerPlayers; }
-  static int setNumberOfComputerPlayers(int p) { numberOfComputerPlayers = p; }
+  static void setNumberOfComputerPlayers(int p) { numberOfComputerPlayers = p; }
 
   static Input getInput(GameAction);
   static Input getAltInput(GameAction);
