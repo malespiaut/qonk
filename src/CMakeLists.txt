@@ -23,16 +23,7 @@ add_executable(qonk
  sdl_driver.cpp settings.cpp videooptions.cpp
 )
 
-target_compile_options(qonk PRIVATE
-		-Wall
-		-Wextra
-    -Wpedantic
-		-Wshadow
-		-Werror=return-type
-		-Werror=int-conversion
-		-Wstrict-aliasing=2
-		-Wdouble-promotion
-	)
+target_compile_options(qonk PRIVATE ${GAME_COMPILE_OPTIONS})
 
 target_link_libraries(qonk
 	guichan guichan_widgets guichan_sdl engine lisp ui

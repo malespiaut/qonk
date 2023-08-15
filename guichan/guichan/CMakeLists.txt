@@ -14,6 +14,9 @@ add_library(guichan SHARED
 	key.cpp keyevent.cpp keyinput.cpp mouseevent.cpp mouseinput.cpp
 	rectangle.cpp widget.cpp
 )
+
+target_compile_options(guichan PRIVATE ${GAME_COMPILE_OPTIONS})
+
 target_link_libraries(guichan guichan_sdl guichan_widgets)
 
 install(TARGETS guichan LIBRARY DESTINATION ${PACKAGE_LIBDIR})

@@ -5,5 +5,8 @@ add_library(guichan_widgets SHARED
 	listbox.cpp radiobutton.cpp scrollarea.cpp slider.cpp textbox.cpp
 	textfield.cpp window.cpp
 )
+
+target_compile_options(guichan_widgets PRIVATE ${GAME_COMPILE_OPTIONS})
+
 install(TARGETS guichan_widgets DESTINATION ${PACKAGE_LIBDIR})
 

@@ -14,6 +14,16 @@ set(CMAKE_INSTALL_RPATH "${PACKAGE_LIBDIR}")
 enable_language(CXX)
 set(CMAKE_CXX_STANDARD 23)
 
+set(GAME_COMPILE_OPTIONS
+  -Wall
+  -Wextra
+  -Wpedantic
+  -Wshadow
+  -Werror=return-type
+  -Wstrict-aliasing=2
+  -Wdouble-promotion
+  )
+
 find_package(SDL 1.2 REQUIRED)
 find_package(SDL_ttf REQUIRED)
 find_package(SDL_image REQUIRED)
