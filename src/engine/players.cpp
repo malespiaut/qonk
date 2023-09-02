@@ -332,7 +332,6 @@ ComputerPlayer::action( const Uint32& time ) {
   // how many (resident) ships do i have, and how many do I want to launch
   // according to my strategy?
   
-  int numberOfShips = ships->size();
   int numberOfResidents = ships->countResidents();
   int numberOfLaunches = numberOfResidents - (int)( ships->size() * proportionResidents ) - 1;
   

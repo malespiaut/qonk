@@ -181,7 +181,6 @@ void
 Canvas::drawRadar()
 {
     int radarSteps = 4;
-    Uint32 radarColor = 0xfee190;
 
     double s = 1.0 / radarSteps;
     for( int i = 1; i <= radarSteps; i++ ) {
