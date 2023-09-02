@@ -314,7 +314,7 @@ namespace gcn
         mOpaque = opaque;
     }
 
-    bool Window::isOpaque()
+    bool Window::isOpaque() const
     {
         return mOpaque;
     }

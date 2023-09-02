@@ -122,7 +122,7 @@ namespace gcn
          *
          * @param graphics a Graphics object to draw with.
          */
-        virtual void drawBorder(Graphics* graphics) { }
+        virtual void drawBorder(Graphics* graphics) { (void)graphics; }
 
         /**
          * Called for all Widgets in the gui each time Gui::logic is called.
@@ -672,7 +672,7 @@ namespace gcn
          *
          * @param widget the Widget to move.
          */
-        virtual void moveToTop(Widget* widget) { };
+        virtual void moveToTop(Widget* widget) { (void)widget; };
 
         /**
          * Moves a widget in this widget to the bottom of this widget.
@@ -680,7 +680,7 @@ namespace gcn
          *
          * @param widget the Widget to move.
          */
-        virtual void moveToBottom(Widget* widget) { };
+        virtual void moveToBottom(Widget* widget) { (void)widget; };
 
         /**
          * Focuses the next Widget in the widget.
@@ -699,7 +699,7 @@ namespace gcn
          * @param widget the target Widget.
          * @param area the area to show.
          */
-        virtual void showWidgetPart(Widget* widget, Rectangle area) { };
+        virtual void showWidgetPart(Widget* widget, Rectangle area) { (void)widget; (void)area; };
 
     protected:
         /**

@@ -499,6 +499,7 @@ namespace gcn
 
     void DropDown::action(const ActionEvent& actionEvent)
     {
+        (void)actionEvent;
         foldUp();
         releaseModalMouseInputFocus();
         generateAction();

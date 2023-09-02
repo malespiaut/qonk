@@ -89,14 +89,14 @@ namespace gcn
          *
          * @param keyEvent discribes the event.
          */
-        virtual void keyPressed(KeyEvent& keyEvent) { }
+        virtual void keyPressed(KeyEvent& keyEvent) { (void)keyEvent; }
 
         /**
          * Called if a key is released when the widget has keyboard focus.
          *
          * @param keyEvent discribes the event.
          */
-        virtual void keyReleased(KeyEvent& keyEvent) { }
+        virtual void keyReleased(KeyEvent& keyEvent) { (void)keyEvent; }
 
     protected:
         /**

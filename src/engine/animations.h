@@ -9,7 +9,7 @@ class Planet;
 
 class Animation : public Action {
 public:
-  void execute( const Uint32& time ) {}
+  void execute( const Uint32& time ) { (void)time; }
   virtual void render(Uint32) = 0;
 };
 

@@ -413,6 +413,7 @@ Planets::getRandomPlanet() {
 Planet*
 Planets::getRandomEnemyPlanet( Player* player ) {
   // TODO: This has to be implemented
+  (void)player;
   return nullptr;
 }
 

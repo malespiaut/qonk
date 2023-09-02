@@ -173,7 +173,7 @@ namespace gcn
          *
          * @return true or false.
          */
-        virtual bool isOpaque();
+        virtual bool isOpaque() const;
 
         /**
          * Resizes the container to fit the content exactly.

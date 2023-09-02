@@ -243,11 +243,13 @@ namespace gcn
 
     void Button::mouseExited(MouseEvent& mouseEvent)
     {
+        (void)mouseEvent;
         mHasMouse = false;
     }
 
     void Button::mouseEntered(MouseEvent& mouseEvent)
     {
+        (void)mouseEvent;
         mHasMouse = true;
     }
 

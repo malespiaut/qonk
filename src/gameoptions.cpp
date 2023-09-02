@@ -16,8 +16,8 @@ using namespace std;
 using namespace gcn;
 
 GameOptions::GameOptions()
-  : enemyVisibilityAction(0), playersAction(0), planetsAction(0),
-    startSinglePlayerGameAction(0), planets(2), players(1)
+  : players(1), planets(2), enemyVisibilityAction(0),
+    playersAction(0), planetsAction(0), startSinglePlayerGameAction(0)
 {
   setPlanets(Settings::getNumberOfPlanets());
   setPlayers(Settings::getNumberOfComputerPlayers());

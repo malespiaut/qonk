@@ -551,6 +551,8 @@ namespace gcn
 
     Widget *Widget::getWidgetAt(int x, int y)
     {
+        (void)x;
+        (void)y;
         return NULL;
     }
 

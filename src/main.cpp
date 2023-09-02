@@ -24,7 +24,7 @@
 using namespace std;
 
 Main::Main()
-  : game(0), running(true), lastTicks(0), fpsCounter(0), fps(0)
+  : lastTicks(0), fpsCounter(0), fps(0), game(0), running(true) 
 {
   driver = new SDLDriver(*this);
   menuManager = new MenuManager(*this);

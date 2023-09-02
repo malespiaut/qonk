@@ -87,7 +87,7 @@ namespace gcn
          */
         virtual void mouseEntered(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
         /**
@@ -97,7 +97,7 @@ namespace gcn
          */
         virtual void mouseExited(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
         /**
@@ -111,7 +111,7 @@ namespace gcn
          */
         virtual void mousePressed(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
         /**
@@ -121,7 +121,7 @@ namespace gcn
          */
         virtual void mouseReleased(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
         /**
@@ -133,7 +133,7 @@ namespace gcn
          */
         virtual void mouseClicked(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
         /**
@@ -144,7 +144,7 @@ namespace gcn
          */
         virtual void mouseWheelMovedUp(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
         /**
@@ -155,7 +155,7 @@ namespace gcn
          */
         virtual void mouseWheelMovedDown(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
         /**
@@ -167,7 +167,7 @@ namespace gcn
          */
         virtual void mouseMoved(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
         /**
@@ -179,7 +179,7 @@ namespace gcn
          */
         virtual void mouseDragged(MouseEvent& mouseEvent)
         {
-
+          (void)mouseEvent;
         }
 
     protected:
